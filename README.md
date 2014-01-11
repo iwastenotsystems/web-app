@@ -8,12 +8,13 @@ License:  "[The MIT License](http://opensource.org/licenses/MIT)"
 
 # Web Application Framework
 
-An *[AngularJS] and [Bootstrap] application framework* written in [CoffeeScript], with tasks automated using [Grunt] and Grunt plugins, and the [Bower] package manager handling the web component dependencies. Deploys to web, as well as Mobile Devices via [PhoneGap].
+An *[AngularJS] and [Bootstrap] application framework* written in [CoffeeScript], with tasks automated using [Grunt] and [Grunt plugins], and the [Bower] package manager handling the web component dependencies. Deploys to web, as well as Mobile Devices via [PhoneGap].
 
 [AngularJS]: http://angularjs.org/
 [Bootstrap]: http://getbootstrap.com/
 [CoffeeScript]: http://coffeescript.org/
 [Grunt]: http://gruntjs.com/
+[Grunt plugins]: http://gruntjs.com/plugins/
 [Bower]: http://bower.io/
 [PhoneGap]: http://phonegap.com/
 
@@ -23,10 +24,9 @@ An *[AngularJS] and [Bootstrap] application framework* written in [CoffeeScript]
 
 > Node.js is a platform built on Chrome's JavaScript runtime for easily building fast, scalable network applications. Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient, perfect for data-intensive real-time applications that run across distributed devices.
 
-*Node.js* is required as as the underlying *scripting language* for the *CoffeeScript compiler*, the *[Cake] build system* and the *[Bower] package manager*. Node.js uses the *`npm`* package manager to handle module dependencies.
+*Node.js* is required as as the underlying *scripting language* for the *CoffeeScript compiler*, the *[Grunt] build system* and the *[Bower] package manager*. Node.js uses the *`npm`* package manager to handle module dependencies.
 
 [Node.js]: http://nodejs.org/
-[Cake]: http://coffeescript.org/#cake
 
 ### [CoffeeScript]
 
