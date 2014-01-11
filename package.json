@@ -1,0 +1,51 @@
+{
+  "name": "web-app",
+  "version": "0.1.0",
+  "description": "A Coffescript Web application boilerplate based on AngularJS and Twitter Bootstrap",
+  "main": "app/index.html",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "dependencies": {
+    "docco": "latest",
+    "ect": "latest",
+    "kckr": "latest",
+    "karma": "latest",
+    "karma-chrome-launcher": "latest",
+    "karma-coffee-preprocessor": "latest",
+    "karma-firefox-launcher": "latest",
+    "karma-html2js-preprocessor": "latest",
+    "karma-jasmine": "latest",
+    "karma-phantomjs-launcher": "latest",
+    "karma-requirejs": "latest",
+    "karma-script-launcher": "latest",
+    "phonegap": "latest",
+    "protractor": "latest",
+    "protractor-coffee-preprocessor": "latest",
+    "requirejs": "latest",
+    "serve": "latest",
+    "webdrvr": "latest",
+    "fs-extra": "latest",
+    "underscore": "latest"
+  },
+  "devDependencies": {
+    "mocha": "latest"
+  },
+  "scripts": {
+    "test": "cake test"
+  },
+  "author": "[Jon Ruttan] (jonruttan@gmail.com)",
+  "license": "MIT",
+  "keywords": [
+    "web-app",
+    "SPA",
+    "SPI",
+    "bootstrap",
+    "angular",
+    "angularjs",
+    "app",
+    "application",
+    "boilerplate"
+  ]
+}

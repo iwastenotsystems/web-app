@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>web-app Cakefile</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1 id="web-app-cakefile">web-app Cakefile</h1>
+<p>The main Cakefile for the web-app project.</p>
+<p>It comes baked in with at least 5 tasks:</p>
+<ul>
+<li>build - compiles your src directory to your lib directory</li>
+<li>watch - watches any changes in your src directory and automatically compiles to the lib directory</li>
+<li>test  - runs mocha test framework, you can edit this task to use your favorite test framework</li>
+<li>docs  - generates annotated documentation using docco</li>
+<li>clean - clean generated .js files</li>
+</ul>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h2 id="initilisation">Initilisation</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>fs      = <span class="built_in">require</span> <span class="string">'fs-extra'</span>
+path    = <span class="built_in">require</span> <span class="string">'path'</span>
+{<span class="built_in">print</span>} = <span class="built_in">require</span> <span class="string">'util'</span>
+{spawn, exec} = <span class="built_in">require</span> <span class="string">'child_process'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>_ = require ‘underscore’</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>kckr    = <span class="built_in">require</span> <span class="string">'kckr'</span>
+
+<span class="keyword">try</span>
+  which = <span class="built_in">require</span>(<span class="string">'which'</span>).sync
+<span class="keyword">catch</span> err
+  <span class="keyword">if</span> process.platform.match(<span class="regexp">/^win/</span>)?
+    console.log <span class="string">'WARNING: the which module is required for windows\ntry: npm install which'</span>
+  which = <span class="literal">null</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Add local <code>node_modules/bin</code> directories to the the PATH environment variable.
+Wrap it in a closure to avoid polluting the top-level namespace.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="keyword">do</span><span class="function"> -&gt;</span>
+  <span class="keyword">for</span> dir <span class="keyword">in</span> fs.readdirSync <span class="string">'node_modules'</span>
+    dir = <span class="string">"node_modules/<span class="subst">#{dir}</span>/bin"</span>
+    process.env.PATH += <span class="string">":<span class="subst">#{dir}</span>"</span> <span class="keyword">if</span> fs.existsSync dir</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <h2 id="configuration">Configuration</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>ANSI Terminal Colors</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>bold = red = green = reset = <span class="string">''</span>
+<span class="keyword">unless</span> process.env.NODE_DISABLE_COLORS
+  bold  = <span class="string">'\x1B[0;1m'</span>
+  red   = <span class="string">'\x1B[0;31m'</span>
+  green = <span class="string">'\x1B[0;32m'</span>
+  reset = <span class="string">'\x1B[0m'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>The <em>Source</em> and <em>Distribution</em> paths</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>paths = 
+  <span class="attribute">source</span>: <span class="string">'app/src'</span>
+  <span class="attribute">dist</span>: <span class="string">'dist/master'</span>
+  <span class="attribute">lib</span>: <span class="string">'lib'</span>
+  <span class="attribute">assets</span>: <span class="string">'assets/data'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <h2 id="cakefile-options">Cakefile Options</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <h2 id="-p-port-web-server-port-"><em>-p, —port, web server port</em></h2>
+<p>Specify a port for the local web server to use. </p>
+<p><small>Usage</small></p>
+<pre><code>cake -p <span class="number">8000</span>
+cake --port <span class="number">8000</span></code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>option <span class="string">'-p'</span>, <span class="string">'--port [PORT]'</span>, <span class="string">'web server port (default: 8000)'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <h2 id="-v-verbose-verbose-output-"><em>-v, —verbose, verbose output</em></h2>
+<p>Output extra information. </p>
+<p><small>Usage</small></p>
+<pre><code>cake -v build
+cake --verbose build</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>option <span class="string">'-v'</span>, <span class="string">'--verbose'</span>, <span class="string">'verbose output'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <h2 id="-w-watch-watch-source-for-changes-"><em>-w, —watch, watch source for changes</em></h2>
+<p>Watch source for changes and re-trigger task. </p>
+<p><small>Usage</small></p>
+<pre><code>cake -w build
+cake --watch build</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>option <span class="string">'-w'</span>, <span class="string">'--watch'</span>, <span class="string">'watch source'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <h2 id="cakefile-tasks">Cakefile Tasks</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <h3 id="-build-"><em>build</em></h3>
+<p>Builds Source</p>
+<p><small>Usage</small></p>
+<pre><code>cake build</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>task <span class="string">'build'</span>, <span class="string">'compile source'</span>, <span class="function"><span class="params">(options)</span> -&gt;</span> clean options, <span class="function"><span class="params">(options)</span> -&gt;</span> build options,<span class="function"> -&gt;</span> log <span class="string">":)"</span>, green</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <h3 id="-watch-"><em>watch</em></h3>
+<p>Builds your source whenever it changes</p>
+<p><small>Usage</small></p>
+<pre><code>cake watch</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>task <span class="string">'watch'</span>, <span class="string">'compile and watch'</span>,<span class="function"> -&gt;</span> build <span class="literal">true</span>,<span class="function"> -&gt;</span> log <span class="string">":-)"</span>, green</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <h3 id="-clean-"><em>clean</em></h3>
+<p>Cleans up generated js files</p>
+<p><small>Usage</small></p>
+<pre><code>cake clean</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>task <span class="string">'clean'</span>, <span class="string">'clean generated files'</span>,<span class="function"> -&gt;</span> clean<span class="function"> -&gt;</span> log <span class="string">";)"</span>, green</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <h3 id="-test-"><em>test</em></h3>
+<p>Runs your test suite.</p>
+<p><small>Usage</small></p>
+<pre><code>cake test</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>task <span class="string">'test'</span>, <span class="string">'run tests'</span>,<span class="function"> -&gt;</span> build<span class="function"> -&gt;</span> mocha<span class="function"> -&gt;</span> log <span class="string">":)"</span>, green</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <h3 id="-test-unit-"><em>test-unit</em></h3>
+<p>Runs your unit test suite.</p>
+<p><small>Usage</small></p>
+<pre><code>cake test-unit</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>task <span class="string">'test-unit'</span>, <span class="string">'run unit tests'</span>,<span class="function"> -&gt;</span> build<span class="function"> -&gt;</span> karma<span class="function"> -&gt;</span> log <span class="string">":)"</span>, green</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <h3 id="-test-e2e-"><em>test-e2e</em></h3>
+<p>Runs your end2end test suite.</p>
+<p><small>Usage</small></p>
+<pre><code>cake test-e2e</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>task <span class="string">'test-e2e'</span>, <span class="string">'run e2e tests'</span>,<span class="function"> -&gt;</span> build<span class="function"> -&gt;</span> protractor<span class="function"> -&gt;</span> log <span class="string">":)"</span>, green</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <h3 id="-serve-"><em>serve</em></h3>
+<p>Start web server on port 8000.</p>
+<p><small>Usage</small></p>
+<pre><code>cake serve</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>task <span class="string">'serve'</span>, <span class="string">'run web server'</span>, <span class="function"><span class="params">(options)</span> -&gt;</span> serve options,<span class="function"> -&gt;</span> log <span class="string">":O"</span>, green</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <h3 id="-webdrvr-"><em>webdrvr</em></h3>
+<p>Start Selenium WebBriver server for End-to-End (e2e) tests.</p>
+<p><small>Usage</small></p>
+<pre><code>cake webdrvr</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>task <span class="string">'webdrvr'</span>, <span class="string">'run web driver'</span>,<span class="function"> -&gt;</span> webdrvr<span class="function"> -&gt;</span> log <span class="string">":|"</span>, green
+
+task <span class="string">'hound'</span>, <span class="string">'hound'</span>,<span class="function"> -&gt;</span> hound<span class="function"> -&gt;</span> log <span class="string">':|'</span>, green
+
+task <span class="string">'watch2'</span>, <span class="string">'watch2'</span>,<span class="function"> -&gt;</span> watch2<span class="function"> -&gt;</span> log <span class="string">':|'</span>, green</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <h2 id="internal-functions">Internal Functions</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="function"><span class="title">isDirectory</span> = <span class="params">(file)</span> -&gt;</span>
+  <span class="keyword">try</span>
+    fs.statSync(file).isDirectory()
+  <span class="keyword">catch</span> err
+    <span class="literal">false</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <h3 id="-walk-"><em>walk</em></h3>
+<p><strong>given</strong> string as path which represents a directory in relation to local directory
+<strong>and</strong> callback as done in the form of (err, source, base)
+<strong>then</strong> recurse through directory and issue callback on each file</p>
+<p>Examples</p>
+<pre><code class="lang-coffeescript">walk <span class="string">'src'</span>, <span class="function"><span class="params">(err, results)</span> -&gt;</span> console.log results</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="function"><span class="title">walk</span> = <span class="params">(paths, callback, base)</span> -&gt;</span>
+  <span class="keyword">if</span> <span class="keyword">typeof</span> paths <span class="keyword">is</span> <span class="string">'object'</span>
+    walk dir, callback, base ? dir <span class="keyword">for</span> dir <span class="keyword">in</span> paths
+    <span class="keyword">return</span>
+
+  <span class="keyword">if</span> isDirectory paths
+    fs.readdir paths, <span class="function"><span class="params">(err, list)</span> -&gt;</span>
+      <span class="keyword">return</span> callback err <span class="keyword">if</span> err
+      walk <span class="string">"<span class="subst">#{paths}</span><span class="subst">#{path.sep}</span><span class="subst">#{dir}</span>"</span>, callback, base <span class="keyword">for</span> dir <span class="keyword">in</span> list
+  <span class="keyword">else</span>
+    callback <span class="literal">null</span>, paths, base ? paths</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <h3 id="-log-"><em>log</em></h3>
+<p><strong>given</strong> string as a message
+<strong>and</strong> string as a color
+<strong>and</strong> optional string as an explanation
+<strong>then</strong> builds a statement and logs to console.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="function"><span class="title">log</span> = <span class="params">(message, color, explanation)</span> -&gt;</span> console.log color + message + reset + <span class="string">' '</span> + (explanation <span class="keyword">or</span> <span class="string">''</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <h3 id="-launch-"><em>launch</em></h3>
+<p><strong>given</strong> string as a cmd
+<strong>and</strong> optional array and option flags
+<strong>and</strong> optional callback
+<strong>then</strong> spawn cmd with options
+<strong>and</strong> pipe to process stdout and stderr respectively
+<strong>and</strong> on child process exit emit callback if set and status is 0</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="function"><span class="title">launch</span> = <span class="params">(cmd, options=[], callback)</span> -&gt;</span>
+  cmd = which(cmd) <span class="keyword">if</span> which
+  app = spawn cmd, options
+  app.stdout.pipe(process.stdout)
+  app.stderr.pipe(process.stderr)
+  app.<span class="literal">on</span> <span class="string">'exit'</span>, <span class="function"><span class="params">(status)</span> -&gt;</span> callback?() <span class="keyword">if</span> status <span class="keyword">is</span> <span class="number">0</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <h3 id="-build-"><em>build</em></h3>
+<p><strong>given</strong> optional boolean as watch
+<strong>and</strong> optional function as callback
+<strong>then</strong> invoke launch passing coffee command
+<strong>and</strong> defaulted options to compile src to lib</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="function"><span class="title">build_v1</span> = <span class="params">(watch, callback)</span> -&gt;</span>
+  <span class="keyword">if</span> <span class="keyword">typeof</span> watch <span class="keyword">is</span> <span class="string">'function'</span>
+    callback = watch
+    watch = <span class="literal">false</span>
+
+  options = [<span class="string">'-c'</span>, <span class="string">'-b'</span>, <span class="string">'-m'</span>, <span class="string">'-o'</span> ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>options = options.concat files</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  options.push path <span class="keyword">for</span> name, path <span class="keyword">of</span> paths
+  options.unshift <span class="string">'-w'</span> <span class="keyword">if</span> watch
+  launch <span class="string">'coffee'</span>, options, callback</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <h3 id="-unlinkifcoffeefile-"><em>unlinkIfCoffeeFile</em></h3>
+<p><strong>given</strong> string as file
+<strong>and</strong> file ends in ‘.coffee’
+<strong>then</strong> convert ‘.coffee’ to ‘.js’
+<strong>and</strong> remove the result</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="function"><span class="title">unlinkIfCoffeeFile</span> = <span class="params">(file)</span> -&gt;</span>
+  <span class="keyword">if</span> file.match <span class="regexp">/\.coffee$/</span>
+    fs.unlink file.replace(<span class="string">'src'</span>,<span class="string">'lib'</span>).replace(<span class="regexp">/\.coffee$/</span>, <span class="string">'.js'</span>),<span class="function"> -&gt;</span>
+    <span class="literal">true</span>
+  <span class="keyword">else</span> <span class="literal">false</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <h3 id="-clean-"><em>clean</em></h3>
+<p><strong>given</strong> optional function as callback
+<strong>then</strong> loop through files variable
+<strong>and</strong> call unlinkIfCoffeeFile on each</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="function"><span class="title">clean</span> = <span class="params">(options, callback)</span> -&gt;</span>
+  <span class="keyword">if</span> <span class="keyword">typeof</span> options <span class="keyword">is</span> <span class="string">'function'</span>
+    callback = options
+    options = {}
+
+  fs.remove paths.dist, <span class="function"><span class="params">(err)</span> -&gt;</span>
+    <span class="keyword">return</span> console.error err <span class="keyword">if</span> err
+    callback options</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <h3 id="-moduleexists-"><em>moduleExists</em></h3>
+<p><strong>given</strong> name for module
+<strong>when</strong> trying to require module
+<strong>and</strong> not found
+<strong>then* print not found message with install helper in red
+</strong>and* return false if not found</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="function"><span class="title">moduleExists</span> = <span class="params">(name)</span> -&gt;</span>
+  <span class="keyword">try</span> 
+    <span class="built_in">require</span> name 
+  <span class="keyword">catch</span> err 
+    log <span class="string">"<span class="subst">#{name}</span> required: npm install <span class="subst">#{name}</span>"</span>, red
+    <span class="literal">false</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <h3 id="-mocha-"><em>mocha</em></h3>
+<p><strong>given</strong> optional array of option flags
+<strong>and</strong> optional function as callback
+<strong>then</strong> invoke launch passing mocha command</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="function"><span class="title">mocha</span> = <span class="params">(options, callback)</span> -&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>if moduleExists(‘mocha’)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">if</span> <span class="keyword">typeof</span> options <span class="keyword">is</span> <span class="string">'function'</span>
+    callback = options
+    options = []</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <p>add coffee directive</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  options.push <span class="string">'--compilers'</span>
+  options.push <span class="string">'coffee:coffee-script'</span>
+  
+  launch <span class="string">'mocha'</span>, options, callback</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <h3 id="-karma-"><em>karma</em></h3>
+<p><strong>given</strong> optional array of option flags
+<strong>and</strong> optional function as callback
+<strong>then</strong> invoke launch passing karma command</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="function"><span class="title">karma</span> = <span class="params">(options, callback)</span> -&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>if moduleExists(‘karma’)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">if</span> <span class="keyword">typeof</span> options <span class="keyword">is</span> <span class="string">'function'</span>
+    callback = options
+    options = []
+  options.push <span class="string">'start'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p>add config file</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  options.push <span class="string">'config/karma.conf.coffee'</span>
+  
+  launch <span class="string">'karma'</span>, options, callback</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <h3 id="-protractor-"><em>protractor</em></h3>
+<p><strong>given</strong> optional array of option flags
+<strong>and</strong> optional function as callback
+<strong>then</strong> invoke launch passing protractor command</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="function"><span class="title">protractor</span> = <span class="params">(options, callback)</span> -&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              <p>if moduleExists(‘mocha’)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">if</span> <span class="keyword">typeof</span> options <span class="keyword">is</span> <span class="string">'function'</span>
+    callback = options
+    options = []</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-38">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-38">&#182;</a>
+              </div>
+              <p>add config file</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  options.push <span class="string">'config/protractor-e2e.conf.js'</span>
+  
+  launch <span class="string">'protractor'</span>, options, callback</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-39">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-39">&#182;</a>
+              </div>
+              <h3 id="-docco-"><em>docco</em></h3>
+<p><strong>given</strong> optional function as callback
+<strong>then</strong> invoke launch passing docco command</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="function"><span class="title">docco</span> = <span class="params">(callback)</span> -&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-40">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-40">&#182;</a>
+              </div>
+              <p>if moduleExists(‘docco’)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  walk paths.src, <span class="function"><span class="params">(err, files)</span> -&gt;</span> launch <span class="string">'docco'</span>, files, callback</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-41">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-41">&#182;</a>
+              </div>
+              <h3 id="-serve-"><em>serve</em></h3>
+<p><strong>given</strong> optional array of option flags
+<strong>and</strong> optional function as callback
+<strong>then</strong> invoke launch passing serve command</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="function"><span class="title">serve</span> = <span class="params">(options, callback)</span> -&gt;</span>
+  <span class="keyword">if</span> <span class="keyword">typeof</span> options <span class="keyword">is</span> <span class="string">'function'</span>
+    callback = options
+    options = {}
+
+  args = [<span class="string">'-p'</span>, options.port ? <span class="string">'8000'</span>]
+  launch <span class="string">'serve'</span>, args, callback</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-42">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-42">&#182;</a>
+              </div>
+              <h3 id="-webdrvr-"><em>webdrvr</em></h3>
+<p><strong>given</strong> optional array of option flags
+<strong>and</strong> optional function as callback
+<strong>then</strong> invoke launch passing webdrvr command</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="function"><span class="title">webdrvr</span> = <span class="params">(options, callback)</span> -&gt;</span>
+  <span class="keyword">if</span> <span class="keyword">typeof</span> options <span class="keyword">is</span> <span class="string">'function'</span>
+    callback = options
+    options = {}
+
+  args = []
+  launch <span class="string">'webdrvr'</span>, args, callback
+
+
+buildActions =
+  <span class="string">'app'</span>: <span class="function"><span class="params">(source, base, callback)</span> -&gt;</span>
+    prefix = path.normalize <span class="string">"<span class="subst">#{base}</span><span class="subst">#{path.sep}</span>"</span>      
+
+    <span class="keyword">if</span> source[prefix.length..].match <span class="regexp">/^src/</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-43">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-43">&#182;</a>
+              </div>
+              <p>TODO: Normalise <code>path.sep</code> in <em><code>source</code></em>.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+      dir = path.dirname source
+      console.log <span class="string">"coffee: <span class="subst">#{source}</span> -&gt; <span class="subst">#{paths.dist}</span>/<span class="subst">#{paths.lib}</span><span class="subst">#{dir[prefix.length..]}</span>"</span>
+      options = [
+        <span class="string">'--compile'</span>
+        <span class="string">'--bare'</span>
+        <span class="string">'--map'</span>
+        <span class="string">'--output'</span>
+        <span class="string">"<span class="subst">#{paths.dist}</span>/<span class="subst">#{paths.lib}</span><span class="subst">#{dir[paths.source.length..]}</span>"</span>
+        source
+      ]
+      launch <span class="string">'coffee'</span>, options, launch <span class="string">'docco'</span>, [source], callback
+
+    <span class="keyword">else</span>
+      console.log <span class="string">"copy: <span class="subst">#{source}</span> -&gt; <span class="subst">#{paths.dist}</span>/<span class="subst">#{path.dirname(source)[prefix.length..]}</span>"</span>
+      fs.copy source, <span class="string">"<span class="subst">#{paths.dist}</span>/<span class="subst">#{source[prefix.length..]}</span>"</span>, <span class="function"><span class="params">(err)</span> -&gt;</span>
+        console.error err <span class="keyword">if</span> err
+
+  <span class="string">'README.md'</span>: <span class="function"><span class="params">(source, base, callback)</span> -&gt;</span>
+    console.log <span class="string">"copy: <span class="subst">#{source}</span> -&gt; <span class="subst">#{paths.dist}</span>/<span class="subst">#{paths.assets}</span>"</span>
+    fs.copy source, <span class="string">"<span class="subst">#{paths.dist}</span>/<span class="subst">#{paths.assets}</span>/<span class="subst">#{source}</span>"</span>, <span class="function"><span class="params">(err)</span> -&gt;</span>
+      console.error err <span class="keyword">if</span> err
+
+  <span class="string">'Cakefile'</span>: <span class="function"><span class="params">(source, base, callback)</span> -&gt;</span>
+    launch <span class="string">'docco'</span>, [source], callback
+
+
+<span class="function"><span class="title">build</span> = <span class="params">(options, callback)</span> -&gt;</span>
+  <span class="keyword">if</span> <span class="keyword">typeof</span> options <span class="keyword">is</span> <span class="string">'function'</span>
+    callback = options
+    options = {}
+
+  walk Object.keys<span class="function"><span class="params">(buildActions)</span>, <span class="params">(err, source, base)</span> -&gt;</span>
+    <span class="keyword">return</span> console.error err <span class="keyword">if</span> err
+
+    <span class="keyword">for</span> key, fn <span class="keyword">of</span> buildActions
+      <span class="keyword">if</span> source.match <span class="keyword">new</span> RegExp <span class="string">"^<span class="subst">#{key}</span>"</span>
+        fn source, key, callback
+        <span class="keyword">break</span>
+  
+  <span class="keyword">if</span> options.watch?
+    <span class="keyword">new</span> kckr.Kckr
+      <span class="attribute">sources</span>: Object.keys buildActions
+      <span class="attribute">verbose</span>: <span class="literal">true</span>
+      <span class="attribute">callback</span>: <span class="function"><span class="params">(source, base)</span> -&gt;</span>
+        buildActions[base] source, base, callback</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

@@ -1,0 +1,9 @@
+x (A) Update angular-ui-bootstrap to use v3
+x (A) Diagnose modal dialog bug
+x (B) Update Cakefile to run tests
+x (A) +tests Configure for unit tests +IT
+x (A) +tests Configure for E2E tests +IT
+x (A) +IT Create hybrid directory layout +admin
+x 2013-11-29 Add `serve` command to Cakefile -> serve +dev +IT  +admin
+x 2013-11-29 Set up npm manifest +IT +admin
+x 2013-11-30 Convert *About Modal* controller/partial to generate Component sections from the data source

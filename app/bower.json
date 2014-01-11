@@ -1,0 +1,45 @@
+{
+  "name": "web-app",
+  "version": "0.1.0",
+  "authors": [
+    "[Jon Ruttan](jonruttan@gmail.com)"
+  ],
+  "description": "A Coffescript Web application boilerplate based on AngularJS and Twitter Bootstrap",
+  "main": "app/index.html",
+  "keywords": [
+    "bootstrap",
+    "SPA",
+    "SPI",
+    "application",
+    "boilerplate"
+  ],
+  "license": [
+    "Code licensed under [MIT](http://opensource.org/licenses/MIT)",
+    "Documentation licensed under [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/)"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "latest",
+    "angular-animate": "latest",
+    "angular-cookies": "latest",
+    "angular-loader": "latest",
+    "angular-mocks": "latest",
+    "angular-resource": "latest",
+    "angular-route": "latest",
+    "angular-sanitize": "latest",
+    "angular-scenario": "latest",
+    "angular-touch": "latest",
+    "angular-ui-bootstrap-bower": "latest",
+    "angular-ui-bootstrap3": "latest",
+    "bootstrap-bower": "latest",
+    "requirejs": "latest",
+    "requirejs-domready": "latest",
+    "marked": "latest"
+  }
+}

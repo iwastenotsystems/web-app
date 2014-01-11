@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>app.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>app.coffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="string">'use strict'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>App Module</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+base = <span class="string">'../bower_components/'</span>
+require.config 
+  <span class="attribute">paths</span>:
+    <span class="string">'domready'</span>: <span class="string">"<span class="subst">#{base}</span>requirejs-domready/domReady"</span>
+    <span class="string">'angular'</span>: <span class="string">"<span class="subst">#{base}</span>angular/angular"</span>
+    <span class="string">'angular-animate'</span>: <span class="string">"<span class="subst">#{base}</span>angular-animate/angular-animate"</span>
+    <span class="string">'angular-cookies'</span>: <span class="string">"<span class="subst">#{base}</span>angular-cookies/angular-cookies"</span>
+    <span class="string">'angular-loader'</span>: <span class="string">"<span class="subst">#{base}</span>angular-loader/angular-loader"</span>
+    <span class="string">'angular-mocks'</span>: <span class="string">"<span class="subst">#{base}</span>angular-mocks/angular-mocks"</span>
+    <span class="string">'angular-resource'</span>: <span class="string">"<span class="subst">#{base}</span>angular-resource/angular-resource"</span>
+    <span class="string">'angular-route'</span>: <span class="string">"<span class="subst">#{base}</span>angular-route/angular-route"</span>
+    <span class="string">'angular-sanitize'</span>: <span class="string">"<span class="subst">#{base}</span>angular-sanitize/angular-sanitize"</span>
+    <span class="string">'angular-scenario'</span>: <span class="string">"<span class="subst">#{base}</span>angular-scenario/angular-scenario"</span>
+    <span class="string">'angular-touch'</span>: <span class="string">"<span class="subst">#{base}</span>angular-touch/angular-touch"</span>
+    <span class="string">'angular-ui-bootstrap-bower'</span>: <span class="string">"<span class="subst">#{base}</span>angular-ui-bootstrap-bower/ui-bootstrap-tpls"</span>
+    <span class="string">'angular-ui-bootstrap3'</span>: <span class="string">"<span class="subst">#{base}</span>angular-ui-bootstrap3/ui-bootstrap-tpls"</span>
+    <span class="string">'bootstrap-bower'</span>: <span class="string">"<span class="subst">#{base}</span>bootstrap-bower/bower"</span>
+    <span class="string">'marked'</span>: <span class="string">"<span class="subst">#{base}</span>marked/lib/marked"</span>
+    <span class="string">'yaml'</span>: <span class="string">"../vendor/yaml.js"</span>
+
+
+app = angular.<span class="built_in">module</span> <span class="string">'myApp'</span>, [
+  <span class="string">'ui.bootstrap'</span>
+  <span class="string">'ngAnimate'</span>
+  <span class="string">'ngResource'</span>
+  <span class="string">'ngRoute'</span>
+  <span class="string">'ngSanitize'</span>
+  <span class="string">'myApp.controllers'</span>
+  <span class="string">'myApp.services'</span>
+  <span class="string">'myApp.filters'</span>
+]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Configure routes and associate them with a view, and a controller.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>app.config <span class="function"><span class="params">($routeProvider)</span> -&gt;</span>
+  $routeProvider
+    .<span class="keyword">when</span>(<span class="string">'/:url?'</span>,
+      <span class="attribute">controller</span>: <span class="string">'myApp.staticContentController'</span>
+      <span class="attribute">templateUrl</span>: <span class="string">'partials/content.html'</span>
+    )
+    .<span class="keyword">when</span>(<span class="string">'/options'</span>,
+      <span class="attribute">controller</span>: <span class="string">'OptionsController'</span>
+      <span class="attribute">templateUrl</span>: <span class="string">'partials/options.html'</span>
+    )</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>.otherwise(redirectTo: ‘/‘)</p>
+
+            </div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

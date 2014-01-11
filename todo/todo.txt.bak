@@ -1,0 +1,11 @@
+(A) Install phonegap +IT  +admin
+(A) +tests Write unit tests +dev
+(A) +tests Write E2E tests +dev
+(A) +docs Document directory layout +IT
+(A) 1 +git Initialise git repo +admin
+(A) 2 +git Remove vendor files +admin
+(A) 3 +git update `.gitignore` file +admin
+(A) 4 +git Add files to repo +admin
+(A) 5 +git Add project to github +admin
+Add `develop` command to Cakefile -> build -> serve -> start tests +dev +IT +admin
+x 2013-11-30 Convert *About Modal* controller/partial to generate Component sections from the data source

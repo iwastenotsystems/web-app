@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" data-ng-app="myApp">
+  <head data-ng-controller="myApp.manifestController">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="shortcut icon" href="assets/images/icon.ico">
+
+    <title data-ng-bind="manifest.name"></title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="bower_components/bootstrap-bower/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="assets/css/app.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="bower_components/bootstrap/assets/js/html5shiv.js"></script>
+      <script src="bower_components/bootstrap/assets/js/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar navbar-fixed-top navbar-inverse" role="navigation" data-ng-controller="myApp.navbarController">
+
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-ng-init="navCollapsed = true" data-ng-click="navCollapsed = !navCollapsed">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="" data-ng-controller="myApp.manifestController" data-ng-bind="manifest.name"></a>
+        </div>
+
+        <div class="collapse navbar-collapse" data-ng-class="!navCollapsed && 'in'">
+          <ul class="nav navbar-nav">
+            <li><a href="" data-ng-click="openModal()">Modal</a></li>
+            <li><a href="" data-ng-click="openAbout()">About</a></li>
+          </ul>
+          <form class="navbar-form navbar-right">
+            <div class="form-group">
+              <input type="text" placeholder="Email" class="form-control">
+            </div>
+            <div class="form-group">
+              <input type="password" placeholder="Password" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-success">Sign in</button>
+          </form>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container -->
+
+    </div><!-- /.navbar -->
+
+    <div class="container">
+      <div class="row row-offcanvas row-offcanvas-right" data-ng-class="!offcanvas && 'active'">
+        <div class="col-xs-12 col-sm-9">
+          <p class="pull-right visible-xs">
+            <button type="button" class="btn btn-primary btn-xs" data-ng-init="offcanvas = true" data-ng-click="offcanvas = !offcanvas">Toggle nav</button>
+          </p>
+
+          <div class="jumbotron">
+            <div class="container">
+              
+              
+            </div>
+          </div>
+          <!-- Placeholder for views -->
+          <div data-ng-view=""></div>
+        </div><!--/span-->
+
+        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+          <div class="well sidebar-nav">
+          </div><!--/.well -->
+        </div><!--/span-->
+      </div><!--/row-->
+
+      <hr>
+
+      <footer data-ng-controller_="myApp.manifestController">
+        <p>&copy; Company 2013</p>
+      </footer>
+
+    </div><!--/.container-->
+
+    <script src="lib/requirejs/require.js" type="text/javascript" charset="utf-8" data-main="lib/require.js"></script>
+
+  </body>
+</html>

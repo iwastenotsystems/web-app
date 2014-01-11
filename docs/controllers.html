@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>controllers.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>controllers.coffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="string">'use strict'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h1 id="controllers-module">Controllers Module</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Create a new module called <em>myApp.controllers</em> to act as a container
+for the application controllers.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>myAppControllers = angular.<span class="built_in">module</span>(<span class="string">'myApp.controllers'</span>, []);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <h2 id="myapp-manifestcontroller">myApp.manifestController</h2>
+<p><em>myApp.manifestController</em> provides the Application’s manifest data
+which is retreived via the <em>myApp.manifestService</em> object.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>myAppControllers.controller <span class="string">'myApp.manifestController'</span>, [
+  <span class="string">'$scope'</span>
+  <span class="string">'myApp.manifestService'</span>
+  <span class="function"><span class="params">($scope, manifestService)</span> -&gt;</span>
+    $scope.manifest = manifestService.getManifest()
+]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <h2 id="myapp-staticcontentcontroller">myApp.staticContentController</h2>
+<p><em>myApp.staticContentController</em> provides static content retreived via an
+$http get request.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>myAppControllers.controller <span class="string">'myApp.staticContentController'</span>, [
+  <span class="string">'$scope'</span>
+  <span class="string">'$routeParams'</span>
+  <span class="string">'$http'</span>
+  <span class="function"><span class="params">($scope, $routeParams, $http)</span> -&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>The <em>$routeProvider</em> route path specified an optional named group 
+parameter, <em><code>url</code></em>. When available use that value for the Url, otherwise
+default to <code>README.md</code>.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    url = $routeParams.url ? <span class="string">'assets/data/README.md'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Request that the $http object fetch the data from the Url, then set the
+$scope’s <em><code>content</code></em> member to the result’s data when the Promise
+resolves.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    $http.get<span class="function"><span class="params">(url)</span>.<span class="title">then</span> <span class="params">(result)</span> -&gt;</span>
+      $scope.content = result.data
+]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <h2 id="myapp-navbarcontroller">myApp.navbarController</h2>
+<p><em>myApp.navbarController</em> provides data and handlers for the Navbar.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>myAppControllers.controller <span class="string">'myApp.navbarController'</span>, [
+  <span class="string">'$scope'</span>
+  <span class="string">'$modal'</span>
+  <span class="string">'myApp.modalService'</span>
+  <span class="function"><span class="params">($scope, $modal, modalService)</span> -&gt;</span>
+
+    $scope.navCollapsed = <span class="literal">false</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <h3 id="openabout-open-about-modal">openAbout: Open About Modal</h3>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    $scope.<span class="function"><span class="title">openAbout</span> = -&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Open the About modal</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      modalInstance = $modal.open
+        <span class="attribute">templateUrl</span>: <span class="string">'partials/about.html'</span>
+        <span class="attribute">controller</span>: <span class="string">'myApp.aboutModalInstanceController'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <h3 id="openmodal-open-modal">openModal: Open Modal</h3>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    $scope.<span class="function"><span class="title">openModal</span> = -&gt;</span>
+      modalService.openModal(
+        <span class="attribute">headerText</span>: <span class="string">'Delete Item?'</span>
+        <span class="attribute">bodyText</span>: <span class="string">'Do you wish to permanently delete this item?'</span>
+        <span class="attribute">dismissButtonText</span>: <span class="string">'Cancel'</span>
+        <span class="attribute">closeButtonText</span>: <span class="string">'Delete'</span>
+      ,
+        <span class="attribute">keyboard</span>: <span class="literal">false</span>
+      ).<span class="keyword">then</span> <span class="function"><span class="params">(result)</span> -&gt;</span>
+        console.log result
+]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <h2 id="myapp-aboutmodalcontroller">myApp.aboutModalController</h2>
+<p><em>myApp.navbarController</em> provides data and handlers for the About modal
+dialog.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>myAppControllers.controller <span class="string">'myApp.aboutModalInstanceController'</span>, [
+  <span class="string">'$scope'</span>
+  <span class="string">'$modalInstance'</span>
+  <span class="string">'myApp.manifestService'</span>
+  <span class="function"><span class="params">($scope, $modalInstance, manifestService)</span> -&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>The About modal needs information about the app, so load the application
+manifest, and component information.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    $scope.manifest = manifestService.getManifest()
+    $scope.assets = manifestService.getAssets()
+
+    $scope.<span class="function"><span class="title">close</span> = <span class="params">(result)</span> -&gt;</span>
+      $modalInstance.close result
+]</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
