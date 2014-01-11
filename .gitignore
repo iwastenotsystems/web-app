@@ -1,4 +1,4 @@
-app/bower_components
+app/vendor/*
 node_modules
 logs/*
 dist/*
