@@ -1,18 +1,20 @@
 Title:    Web Application Boilerplate  
 Subtitle: Using CoffeeScript, AngularJS, Twitter Bootstrap and PhoneGap  
-Keywords: [ #CoffeeScript, #AngularJS, #Bootstrap, #PhoneGap, #SinglePageApplication, #SPA, #SPI, #application, #boilerplate ]  
+Keywords: [#CoffeeScript, #AngularJS, #Bootstrap, #PhoneGap, #SinglePageApplication, #SPA, #SPI, #application, #boilerplate]  
 Author:   "[Jon Ruttan](jonruttan@gmail.com)"  
 Date:     2013-10-21  
-Revision: 1 (2013-10-21)  
+Revision: 2 (2014-01-11)  
 License:  "[The MIT License](http://opensource.org/licenses/MIT)"  
 
 # Web Application Boilerplate
 
-An *[AngularJS] and [Bootstrap] application boilerplate* written in [CoffeeScript]. Deploys to web as well as Mobile Devices via [PhoneGap].
+An *[AngularJS] and [Bootstrap] application boilerplate* written in [CoffeeScript], with tasks automated using [Grunt] and Grunt plugins, and the [Bower] package manager handling the web component dependencies. Deploys to web, as well as Mobile Devices via [PhoneGap].
 
 [AngularJS]: http://angularjs.org/
 [Bootstrap]: http://getbootstrap.com/
 [CoffeeScript]: http://coffeescript.org/
+[Grunt]: http://gruntjs.com/
+[Bower]: http://bower.io/
 [PhoneGap]: http://phonegap.com/
 
 ## Requirements
@@ -34,6 +36,17 @@ Once Node.js has been installed, CoffeeScript can be installed via the *`npm`* p
 
     sudo npm install -g coffeescript
 
+This will put the `coffee` command in your system path, allowing it to be run from any directory.
+
+### [Grunt]
+
+> Grunt: The JavaScript Task Runner. Why use a task runner? In one word: automation. The less work you have to do when performing repetitive tasks like minification, compilation, unit testing, linting, etc, the easier your job becomes. After you've configured it, a task runner can do most of that mundane work for you—and your team—with basically zero effort.
+
+Once Node.js has been installed, Grunt can be installed via the *`npm`* package manager by issuing the following command:
+
+    sudo npm install -g grunt-cli
+
+This will put the `grunt` command in your system path, allowing it to be run from any directory.
 
 ### [Git]
 
@@ -51,7 +64,7 @@ Bower depends on Node and npm. It's installed globally using *`npm`*:
 
     npm install -g bower
 
-[Bower]: http://bower.io/
+This will put the `bower` command in your system path, allowing it to be run from any directory.
 
 ### Optional: [PhoneGap]
 
@@ -66,8 +79,6 @@ Bower depends on Node and npm. It's installed globally using *`npm`*:
 > \[PhoneGap\] uses a tool called Weinre to enable remote debugging of mobile apps. [^user-debug-server]
 
     npm -g install weinre
-
-
 
 [PhoneGap]: http://phonegap.com/
 [Weinre]: http://people.apache.org/~pmuellr/weinre/docs/latest/
