@@ -1,14 +1,14 @@
-Title:    Web Application Boilerplate  
+Title:    Web Application Framework  
 Subtitle: Using CoffeeScript, AngularJS, Twitter Bootstrap and PhoneGap  
-Keywords: [#CoffeeScript, #AngularJS, #Bootstrap, #PhoneGap, #SinglePageApplication, #SPA, #SPI, #application, #boilerplate]  
+Keywords: [#CoffeeScript, #AngularJS, #Bootstrap, #PhoneGap, #SinglePageApplication, #SPA, #SPI, #application, #framework]  
 Author:   "[Jon Ruttan](jonruttan@gmail.com)"  
 Date:     2013-10-21  
 Revision: 2 (2014-01-11)  
 License:  "[The MIT License](http://opensource.org/licenses/MIT)"  
 
-# Web Application Boilerplate
+# Web Application Framework
 
-An *[AngularJS] and [Bootstrap] application boilerplate* written in [CoffeeScript], with tasks automated using [Grunt] and Grunt plugins, and the [Bower] package manager handling the web component dependencies. Deploys to web, as well as Mobile Devices via [PhoneGap].
+An *[AngularJS] and [Bootstrap] application framework* written in [CoffeeScript], with tasks automated using [Grunt] and Grunt plugins, and the [Bower] package manager handling the web component dependencies. Deploys to web, as well as Mobile Devices via [PhoneGap].
 
 [AngularJS]: http://angularjs.org/
 [Bootstrap]: http://getbootstrap.com/
