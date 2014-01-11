@@ -1,6 +1,7 @@
 app/vendor/*
 node_modules
-logs/*
 dist/*
+docs/*
+logs/*
 
 *.sublime-*

@@ -2,7 +2,7 @@
 
 # Require Module
 
-base = '../bower_components/'
+base = '../vendor/'
 require.config 
   paths:
     'domready': "#{base}requirejs-domready/domReady"
@@ -20,7 +20,7 @@ require.config
     'angular-ui-bootstrap3': "#{base}angular-ui-bootstrap3/ui-bootstrap-tpls"
     'bootstrap-bower': "#{base}bootstrap-bower/bower"
     'marked': "#{base}marked/lib/marked"
-    'yaml': "../vendor/yaml.js"
+    'yaml': "#{base}/yaml.js"
 
   shim:
     angular:

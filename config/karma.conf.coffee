@@ -3,20 +3,20 @@ module.exports = (config) ->
     basePath : '../'
 
     files : [
-      'app/bower_components/angular/angular.js'
-      'app/bower_components/angular-**/angular-*.js'
-      'app/bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js'
-      'app/bower_components/marked/lib/marked.js'
-      'app/bower_components/js-yaml/js-yaml.js'
+      'app/vendor/angular/angular.js'
+      'app/vendor/angular-**/angular-*.js'
+      'app/vendor/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js'
+      'app/vendor/marked/lib/marked.js'
+      'app/vendor/js-yaml/js-yaml.js'
       'app/dist/*.js'
       'app/dist/**/*.js'
       'tests/unit/**/*.coffee'
     ]
 
     exclude : [
-      'app/bower_components/angular-loader/angular-loader.js'
-      'app/bower_components/angular-scenario/angular-scenario.js'
-      'app/bower_components/angular-**/angular-*.min.js'
+      'app/vendor/angular-loader/angular-loader.js'
+      'app/vendor/angular-scenario/angular-scenario.js'
+      'app/vendor/angular-**/angular-*.min.js'
     ]
 
     autoWatch : true
