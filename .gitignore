@@ -1,3 +1,5 @@
+app/assets/data/*
+app/dist/*
 app/vendor/*
 node_modules
 dist/*

@@ -49,11 +49,17 @@ unless process.env.NODE_DISABLE_COLORS
 
 # The *Source* and *Distribution* paths
 paths = 
+  dist: 'app/dist'
   source: 'app/src'
-  dist: 'dist/master'
-  lib: 'lib'
-  assets: 'assets/data'
+#  source: 'app/src'
+#  dist: 'dist/master'
+#  lib: 'lib'
+  assets: 'app/assets/data'
 
+
+assets =
+  'README.md': 'README.md'
+  'bower.json': 'config/bower.json'
 
 # ## Cakefile Options
 #
@@ -108,7 +114,8 @@ option '-w', '--watch', 'watch source'
 # ```
 # cake build
 # ```
-task 'build', 'compile source', (options) -> clean options, (options) -> build options, -> log ":)", green
+task 'build', 'compile source', (options) -> build_v1 options, -> log ":)", green
+#task 'build', 'compile source', (options) -> clean options, (options) -> build_v1 options, -> log ":)", green
 
 # ### *watch*
 #
@@ -262,11 +269,13 @@ build_v1 = (watch, callback) ->
     callback = watch
     watch = false
 
-  options = ['-c', '-b', '-m', '-o' ]
-  #options = options.concat files
-  options.push path for name, path of paths
+  options = ['-c', '-b', '-m', '-o', paths.dist, paths.source]
   options.unshift '-w' if watch
   launch 'coffee', options, callback
+
+  for asset, path of assets
+    fs.copy path, "#{paths.assets}/#{asset}", (err) ->
+      console.error err if err
 
 # ### *unlinkIfCoffeeFile*
 #
