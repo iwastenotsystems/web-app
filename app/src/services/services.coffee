@@ -14,7 +14,7 @@ myAppServices = angular.module('myApp.services', []);
 myAppServices.service 'myApp.manifestService', [
   '$resource'
   ($resource) ->
-    manifestResource = $resource 'assets/data/bower.json'
+    manifestResource = $resource 'bower.json'
     assetsResource = $resource 'assets/assets.json'
 
     @getManifest = ->
