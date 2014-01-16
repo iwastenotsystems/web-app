@@ -59,7 +59,6 @@ paths =
 
 assets =
   'README.md': 'README.md'
-  'bower.json': 'config/bower.json'
 
 # ## Cakefile Options
 #
@@ -114,7 +113,7 @@ option '-w', '--watch', 'watch source'
 # ```
 # cake build
 # ```
-task 'build', 'compile source', (options) -> build_v1 options, -> log ":)", green
+task 'build', 'compile source', (options) -> build_v1 false, -> log ":)", green
 #task 'build', 'compile source', (options) -> clean options, (options) -> build_v1 options, -> log ":)", green
 
 # ### *watch*
@@ -126,7 +125,7 @@ task 'build', 'compile source', (options) -> build_v1 options, -> log ":)", gree
 # ```
 # cake watch
 # ```
-task 'watch', 'compile and watch', -> build true, -> log ":-)", green
+task 'watch', 'compile and watch', -> build_v1 true, -> log ":-)", green
 
 # ### *clean*
 #
