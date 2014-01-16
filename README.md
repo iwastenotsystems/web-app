@@ -10,6 +10,8 @@ License:  "[The MIT License](http://opensource.org/licenses/MIT)"
 
 An *[AngularJS] and [Bootstrap] application framework* written in [CoffeeScript], with tasks automated using [Grunt] and [Grunt plugins], and the [Bower] package manager handling the web component dependencies. Deploys to web, as well as Mobile Devices via [PhoneGap].
 
+**Note:** The build system is in transition from CoffeeScript's Cake build system to [Grunt].
+
 [AngularJS]: http://angularjs.org/
 [Bootstrap]: http://getbootstrap.com/
 [CoffeeScript]: http://coffeescript.org/
@@ -17,6 +19,20 @@ An *[AngularJS] and [Bootstrap] application framework* written in [CoffeeScript]
 [Grunt plugins]: http://gruntjs.com/plugins/
 [Bower]: http://bower.io/
 [PhoneGap]: http://phonegap.com/
+
+## Quick Start
+
+Install Node.js and Git, then:
+
+    git clone git://github.com/iwastenotsystems/web-app
+    cd web-app
+    sudo npm -g install coffeescript grunt-cli karma bower
+    npm install
+    bower install
+    cake build
+    cake serve
+
+Finally, open `http://localhost:8000/app` in your browser.
 
 ## Requirements
 
