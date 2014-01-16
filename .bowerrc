@@ -1,4 +1,4 @@
 {
-  "directory": "app/vendor",
-  "json": "config/bower.json"
+  "cwd": "app",
+  "directory": "vendor"
 }
