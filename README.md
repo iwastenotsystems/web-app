@@ -3,7 +3,7 @@ Subtitle: Using CoffeeScript, AngularJS, Twitter Bootstrap and PhoneGap
 Keywords: [#CoffeeScript, #AngularJS, #Bootstrap, #PhoneGap, #SinglePageApplication, #SPA, #SPI, #application, #framework]  
 Author:   "[Jon Ruttan](jonruttan@gmail.com)"  
 Date:     2013-10-21  
-Revision: 2 (2014-01-11)  
+Revision: 3 (2014-01-15)  
 License:  "[The MIT License](http://opensource.org/licenses/MIT)"  
 
 # Web Application Framework
