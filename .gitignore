@@ -1,7 +1,14 @@
 build
 node_modules
 vendor
-docs/*
+docs
 logs/*
 
+# Sublime Text editor files
 *.sublime-*
+
+# ## Firefox bug
+#
+# Debug log created by Adobe Reader browser plugin (nppdf.so)
+# <https://bugs.launchpad.net/ubuntu/+source/acroread/+bug/986841>
+C:\\nppdf32Log\\debuglog.txt
