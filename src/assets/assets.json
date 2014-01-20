@@ -61,6 +61,11 @@
         "name": "PhoneGap",
         "url": "http://phonegap.com/",
         "description": "mobile application framework"
+      },
+      {
+        "name": "EditorConfig",
+        "url": "http://editorconfig.org/",
+        "description": "coding style file format and text editor plugins"
       }
     ]
   },
