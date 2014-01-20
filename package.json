@@ -1,41 +1,7 @@
 {
   "name": "web-app",
-  "version": "0.1.0",
   "description": "A Coffescript Web application boilerplate based on AngularJS and Twitter Bootstrap",
-  "main": "app/index.html",
-  "directories": {
-    "doc": "docs",
-    "test": "test"
-  },
-  "dependencies": {
-    "docco": "latest",
-    "ect": "latest",
-    "kckr": "latest",
-    "karma": "latest",
-    "karma-chrome-launcher": "latest",
-    "karma-coffee-preprocessor": "latest",
-    "karma-firefox-launcher": "latest",
-    "karma-html2js-preprocessor": "latest",
-    "karma-jasmine": "latest",
-    "karma-phantomjs-launcher": "latest",
-    "karma-requirejs": "latest",
-    "karma-script-launcher": "latest",
-    "phonegap": "latest",
-    "protractor": "latest",
-    "protractor-coffee-preprocessor": "latest",
-    "requirejs": "latest",
-    "serve": "latest",
-    "webdrvr": "latest",
-    "fs-extra": "latest",
-    "underscore": "latest"
-  },
-  "devDependencies": {
-    "mocha": "latest"
-  },
-  "scripts": {
-    "test": "cake test"
-  },
-  "author": "[Jon Ruttan] (jonruttan@gmail.com)",
+  "version": "0.1.1",
   "license": "MIT",
   "keywords": [
     "web-app",
@@ -47,5 +13,47 @@
     "app",
     "application",
     "boilerplate"
-  ]
+  ],
+  "author": "[Jon Ruttan] (jonruttan@gmail.com)",
+  "homepage": "https://github.com/iwastenotsystems/web-app",
+  "main": "app/index.html",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "devDependencies": {
+    "karma": "latest",
+    "karma-jasmine": "latest",
+    "karma-chrome-launcher": "latest",
+    "karma-firefox-launcher": "latest",
+    "karma-coffee-preprocessor": "latest",
+    "karma-html2js-preprocessor": "latest",
+    "karma-requirejs": "latest",
+    "phonegap": "latest",
+    "serve": "latest",
+    "protractor": "latest",
+    "protractor-coffee-preprocessor": "latest",
+    "webdrvr": "latest",
+    "mocha": "latest",
+    "grunt": "latest",
+    "grunt-bump": "latest",
+    "grunt-coffeelint": "latest",
+    "grunt-contrib-clean": "latest",
+    "grunt-contrib-coffee": "latest",
+    "grunt-contrib-concat": "latest",
+    "grunt-contrib-copy": "latest",
+    "grunt-contrib-jshint": "latest",
+    "grunt-contrib-uglify": "latest",
+    "grunt-contrib-watch": "latest",
+    "grunt-conventional-changelog": "latest",
+    "grunt-html2js": "latest",
+    "grunt-karma": "latest",
+    "grunt-ngmin": "latest",
+    "grunt-recess": "latest",
+    "grunt-docco": "latest",
+    "grunt-phonegap": "~0.8.0"
+  },
+  "scripts": {
+    "test": "grunt karma"
+  }
 }
