@@ -1,8 +1,6 @@
-app/assets/data/*
-app/dist/*
-app/vendor/*
+build
 node_modules
-dist/*
+vendor
 docs/*
 logs/*
 
