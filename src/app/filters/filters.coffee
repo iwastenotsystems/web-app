@@ -4,12 +4,12 @@
 
 # Create a new module called *`myApp.filters`* which will act as a container
 # for the application filters.
-myAppFilters = angular.module('myApp.filters', []);
+myAppFilters = angular.module 'myApp.filters', []
 
 # ## Markdown Filter
 # Create a new sanitising *Markdown* filter called *`markdown`*.
 # The filter is based on the *[Marked]* Markdown parser and compiler module.
-# 
+#
 # [Marked]: https://github.com/chjj/marked
 myAppFilters.filter 'markdown', [
   '$sce'

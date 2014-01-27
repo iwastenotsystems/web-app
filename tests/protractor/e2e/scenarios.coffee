@@ -5,8 +5,18 @@
 describe 'MyApp', ->
 
   it 'should redirect index.html to index.html#/', ->
-    browser.get 'app/index.html'
-    expect(browser.getCurrentUrl()).toMatch /\/jon$/
+    browser.get 'index.html'
+    expect(browser.getCurrentUrl()).toMatch /\/index.html$/
+
+
+  describe 'About page', ->
+
+    beforeEach ->
+      browser.get 'index.html'
+      browser.findElement(global.by.linkText 'About').click()
+
+    # it 'should display an "About" modal', ->
+    #   expect(browser.findElement('div.modal-header h?').getText()).toMatch '^About'
 
 
   # describe 'Phone list view', ->
@@ -34,7 +44,7 @@ describe 'MyApp', ->
 
   #   it 'should be possible to control phone order via the drop down select box', ->
   #     # narrow the dataset to make the test assertions shorter
-  #     element(global.by.model 'query').sendKeys 'tablet' 
+  #     element(global.by.model 'query').sendKeys 'tablet'
 
   #     browser.findElements(global.by.repeater('phone in phones').column 'name').then (arr) ->
   #         expect(arr[0].getText()).toEqual "Motorola XOOM\u2122 with Wi-Fi"
@@ -72,7 +82,7 @@ describe 'MyApp', ->
   #   it 'should swap main image if a thumbnail image is clicked on', ->
   #     browser.findElement(global.by.css '.phone-thumbs li:nth-child(3) img').click()
   #     expect(element(global.by.css 'img.phone.active').getAttribute 'src')
-  #       .toMatch /img\/phones\/nexus-s.2.jpg$/ 
+  #       .toMatch /img\/phones\/nexus-s.2.jpg$/
 
   #     browser.findElement(global.by.css '.phone-thumbs li:nth-child(1) img').click()
   #     expect(element(global.by.css 'img.phone.active').getAttribute 'src')

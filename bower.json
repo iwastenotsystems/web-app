@@ -38,8 +38,6 @@
     "angular-ui-bootstrap-bower": "latest",
     "angular-ui-bootstrap3": "latest",
     "bootstrap": "latest",
-    "requirejs": "latest",
-    "requirejs-domready": "latest",
     "marked": "latest"
   }
 }
