@@ -1,0 +1,82 @@
+[
+  {
+    "name": "Included Components",
+    "assets": [
+      {
+        "name": "Twitter Bootstrap",
+        "url": "http://getbootstrap.com/",
+        "description": "layout and UI components"
+      },
+      {
+        "name": "AngularJS",
+        "url": "http://angularjs.org/",
+        "description": "structural framework for dynamic web apps"
+      },
+      {
+        "name": "AngularUI",
+        "url": "http://angular-ui.github.io/",
+        "description": "companion suites to the AngularJS framework"
+      },
+      {
+        "name": "Marked",
+        "url": "https://github.com/chjj/marked",
+        "description": "markdown parser and compiler"
+      },
+      {
+        "name": "Cog Icon",
+        "url": "http://brsev.deviantart.com/",
+        "description": "logo"
+      }
+    ]
+  },
+  {
+    "name": "Development Components",
+    "assets": [
+      {
+        "name": "Node.js",
+        "url": "http://nodejs.org/",
+        "description": "JavaScript environment"
+      },
+      {
+        "name": "CoffeeScript",
+        "url": "http://coffeescript.org/",
+        "description": "JavaScript transcompiler"
+      },
+      {
+        "name": "Git",
+        "url": "http://git-scm.com/",
+        "description": "distributed version control system"
+      },
+      {
+        "name": "Bower",
+        "url": "http://bower.io/",
+        "description": "JavaScript package manager"
+      },
+      {
+        "name": "Grunt",
+        "url": "http://gruntjs.com/",
+        "description": "The JavaScript Task Runner"
+      },
+      {
+        "name": "PhoneGap",
+        "url": "http://phonegap.com/",
+        "description": "mobile application framework"
+      },
+      {
+        "name": "EditorConfig",
+        "url": "http://editorconfig.org/",
+        "description": "coding style file format and text editor plugins"
+      }
+    ]
+  },
+  {
+    "name": "Resources",
+    "assets": [
+      {
+        "name": "angular-seed",
+        "url": "https://github.com/angular/angular-seed",
+        "description": "application skeleton for a typical AngularJS web app"
+      }
+    ]
+  }
+]
