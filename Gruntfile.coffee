@@ -1,4 +1,13 @@
+# # Web-App Gruntfile -- *Task Runner Definitions*
+#
+# TODO: Formal task docs -- JR
+# > This file defines the build tasks associated with the Web-App project.
+
+# Set up a wrapper function to encapsulate the Grunt configuration. When Grunt
+# runs it will call this function and pass it a Grunt object.
 module.exports = (grunt) ->
+
+  _ = require 'lodash'
 
   # Load required Grunt tasks. These are installed based on the versions listed
   # in `package.json` when you do `npm install` in this directory.
@@ -12,53 +21,35 @@ module.exports = (grunt) ->
   taskConfig =
     # We read in our `package.json` file so we can access the package name and
     # version. It's already there, so we don't repeat ourselves here.
-    pkg: grunt.file.readJSON 'package.json'
+    pkg: grunt.file.readJSON userConfig.file.manifest.node
 
-    # The banner is the comment that is placed at the top of our compiled
-    # source files. It is first processed as a Grunt template, where the `<%=`
-    # pairs are evaluated based on this very configuration object.
-    meta:
-      banner:
-        """
-        /**
-         * <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>
-         * <%= pkg.homepage %>
-         *
-         * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>
-         * Licensed <%= pkg.licenses.type %> <<%= pkg.licenses.url %>>
-         */
-        """
-
-    # Creates a changelog on a new version.
+    # Generate a changelog from git metadata, using the AngularJS commit
+    # conventions. View CONVENTIONS.md for a synposis of the conventions with
+    # commit examples.
+    # TODO: Test this after a commit w/properly formatted comments -- JR
     changelog:
       options:
-        dest: 'CHANGELOG.md'
-        template: 'changelog.tpl'
+        dest: '<%= file.changelog.dest %>'
+        template: '<%= file.changelog.template %>'
 
     # Increments the version number, etc.
     bump:
       options:
         files: [
-          'package.json'
-          'bower.json'
+          '<%= file.manifest.node %>'
+          '<%= file.manifest.bower %>'
         ]
         commit: false
-        commitMessage: 'chore(release): v%VERSION%'
+        commitMessage: 'chore(release): <%= bump.options.tagName %>'
         commitFiles: [
-          'package.json'
-          'client/bower.json'
+          '<%= file.manifest.node %>'
+          '<%= file.manifest.bower %>'
         ]
         createTag: false
-        tagName: 'v%VERSION%'
-        tagMessage: 'Version %VERSION%'
+        tagName: '<%= meta.git.tagName %>'
+        tagMessage: '<%= meta.git.tagMessage %>'
         push: false
-        pushTo: 'origin'
-
-    # The directories to delete when `grunt clean` is executed.
-    clean: [
-      '<%= build_dir %>'
-      '<%= compile_dir %>'
-    ]
+        pushTo: '<%= meta.git.branch %>'
 
     shell:
       options:
@@ -74,245 +65,91 @@ module.exports = (grunt) ->
       protractor_install:
         command: 'node_modules/protractor/bin/webdriver-manager update'
 
+      bower_install:
+        command: 'bower install'
+
+      bower_update:
+        command: 'bower update'
+
       npm_install:
         command: 'npm install'
 
+      npm_update:
+        command: 'npm update'
+
     connect:
       options:
-        port: 8888
-        base: 'build/debug'
+        base: '<%= path.build.target %>'
+        port: '<%= port.release %>'
 
-      webserver:
+      develop:
         options:
-          port: 8001
-          base: 'build/debug'
+          base: '<%= path.build.develop %>'
+          port: '<%= port.develop %>'
+
+      release:
+        options:
+          base: '<%= path.build.release %>'
           keepalive: true
+          port: '<%= port.release %>'
 
-      devserver:
+      test:
         options:
-          port: 8001
-
-      testserver:
-        options:
-          port: 9001
+          base: '<%= path.build.develop %>'
+          port: '<%= port.test %>'
 
       coverage:
         options:
-          base: 'coverage/'
-          port: 5001
+          base: '<%= path.base.coverage %>'
           keepalive: true
+          port: '<%= port.coverage %>'
 
-
-    # The Protractor configurations.
-    protractor:
-      options:
-        keepAlive: true
-        configFile: 'config/protractor-e2e.conf.js'
-        # args:
-        #   seleniumServerJar: 'node_modules/protractor/selenium/selenium-server-standalone-2.39.0.jar'
-
-      singlerun: {}
-
-      auto:
-        keepAlive: true
-        options:
-          args:
-            seleniumPort: 4444
 
     open:
-      devserver:
-        path: 'http://localhost:8001'
+      develop:
+        path: 'http://localhost:<%= port.develop %>'
+
+      release:
+        path: 'http://localhost:<%= port.release %>'
 
       coverage:
-        path: 'http://localhost:5001'
+        path: 'http://localhost:<%= port.coverage %>'
 
-    # The Karma configurations.
-    karma:
-      unit:
-        configFile: '<%= build_dir %>/karma-unit.coffee'
-        autoWatch: false
-        singleRun: true
-
-      unit_auto:
-        configFile: '<%= build_dir %>/karma-unit.coffee'
-        autoWatch: true
-        singleRun: false
-
-      unit_coverage:
-        configFile: '<%= build_dir %>/karma-unit.coffee'
-        autoWatch: false
-        singleRun: true
-        reporters: [ 'progress', 'coverage' ]
-        preprocessors:
-          '<%= app_files.js %>': [ 'coverage' ]
-          '<%= app_files.coffee %>': [ 'coverage' ]
-
-        coverageReporter:
-          type: 'html'
-          dir: 'coverage/'
-
-    # The `copy` task just copies files from A to B. We use it here to copy
-    # our project assets (images, fonts, etc.) and javascripts into
-    # `build_dir`, and then to copy the assets to `compile_dir`.
-    copy:
-      build_app_assets:
-        files: [
-          {
-            src: [ '**' ]
-            dest: '<%= build_dir %>/assets/'
-            cwd: 'src/assets'
-            expand: true
-          }
-        ]
-      build_vendor_assets:
-        files: [
-          {
-            src: [ '<%= vendor_files.assets %>' ]
-            dest: '<%= build_dir %>/assets/'
-            cwd: '.'
-            expand: true
-            flatten: true
-          }
-        ]
-      build_appjs:
-        files: [
-          {
-            src: [ '<%= app_files.js %>' ]
-            dest: '<%= build_dir %>/'
-            cwd: '.'
-            expand: true
-          }
-        ]
-      build_vendorjs:
-        files: [
-          {
-            src: [ '<%= vendor_files.js %>' ]
-            dest: '<%= build_dir %>/'
-            cwd: '.'
-            expand: true
-          }
-        ]
-      build_testjs:
-        files: [
-          {
-            src: [ '<%= test_files.js %>' ]
-            dest: '<%= build_dir %>/'
-            cwd: '.'
-            expand: true
-          }
-        ]
-      compile_assets:
-        files: [
-          {
-            src: [ '**' ]
-            dest: '<%= compile_dir %>/assets'
-            cwd: '<%= build_dir %>/assets'
-            expand: true
-          }
-        ]
-
-    # `grunt concat` concatenates multiple source files into a single file.
-    concat:
-      # The `build_css` target concatenates compiled CSS and vendor CSS
-      # together.
-      build_css:
-        src: [
-          '<%= vendor_files.css %>'
-          '<%= recess.build.dest %>'
-        ]
-        dest: '<%= recess.build.dest %>'
-
-      # The `compile_js` target is the concatenation of our application source
-      # code and all specified vendor source code into a single file.
-      compile_js:
-        options:
-          banner: '<%= meta.banner %>'
-        src: [
-          '<%= vendor_files.js %>'
-          'config/module.prefix'
-          '<%= build_dir %>/src/**/*.js'
-          '<%= html2js.app.dest %>'
-          '<%= html2js.common.dest %>'
-          'config/module.suffix'
-        ]
-        dest: '<%= compile_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.js'
-
-    # `grunt coffee` compiles the CoffeeScript sources. To work well with the
-    # rest of the build, we have a separate compilation task for sources and
-    # specs so they can go to different places. For example, we need the
-    # sources to live with the rest of the copied JavaScript so we can include
-    # it in the final build, but we don't want to include our specs there.
-    coffee:
-      source:
-        options:
-          bare: true
-          sourceMap: true
-        expand: true
-        cwd: '.'
-        src: [ '<%= app_files.coffee %>' ]
-        dest: '<%= build_dir %>'
-        ext: '.js'
 
     # `docco` produces an HTML document that displays your comments
     # intermingled with your code. All prose is passed through Markdown, and
     # code is passed through Highlight.js syntax highlighting.
     docco:
       build:
-        src: [
-          'README.md'
-          'Gruntfile.js'
-          'Gruntfile.coffee'
-          '<%= app_files.js %>'
-          '<%= app_files.coffee %>'
-        ]
+        src: '<%= files.app.doc %>'
         options: {
           layout: 'linear'
-          output: '<%= docs_dir %>'
+          output: '<%= path.base.docs %>'
         }
 
-    # `ng-min` annotates the sources before minifying. That is, it allows us
-    # to code without the array syntax.
-    ngmin:
-      compile:
-        files: [
-          {
-            src: [ '<%= app_files.js %>' ]
-            cwd: '<%= build_dir %>'
-            dest: '<%= build_dir %>'
-            expand: true
-          }
-        ]
+    # The directories to delete when `grunt clean` is executed.
+    clean: [
+      '<%= path.build.target %>*'
+    ]
 
-    # Minify the sources!
-    uglify:
-      compile:
+    # HTML2JS is a Grunt plugin that takes all of your template files and
+    # places them into JavaScript files as strings that are added to
+    # AngularJS's template cache. This means that the templates too become
+    # part of the initial payload as one JavaScript file. Neat!
+    html2js:
+      # These are the templates from `src/app`.
+      app:
         options:
-          banner: '<%= meta.banner %>'
-        files:
-          '<%= concat.compile_js.dest %>': '<%= concat.compile_js.dest %>'
+          base: '<%= path.base.app %>'
+        src: [ '<%= files.app.atpl %>' ]
+        dest: '<%= path.build.develop %>templates-app.js'
 
-    # `recess` handles our LESS compilation and uglification automatically.
-    # Only our `main.less` file is included in compilation; all other files
-    # must be imported from this file.
-    recess:
-      build:
-        src: [ '<%= app_files.less %>' ]
-        dest: '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
+      # These are the templates from `src/common`.
+      common:
         options:
-          compile: true
-          compress: false
-          noUnderscores: false
-          noIDs: false
-          zeroUnits: false
-      compile:
-        src: [ '<%= recess.build.dest %>' ]
-        dest: '<%= recess.build.dest %>'
-        options:
-          compile: true
-          compress: true
-          noUnderscores: false
-          noIDs: false
-          zeroUnits: false
+          base: '<%= path.base.app %><%= path.app.common %>'
+        src: [ '<%= files.app.ctpl %>' ]
+        dest: '<%= path.build.develop %>templates-common.js'
 
     # `jshint` defines the rules of our linter as well as which files we
     # should check. This file, all javascript sources, and all our unit tests
@@ -321,14 +158,15 @@ module.exports = (grunt) ->
     # point (!); this is useful when code comes from a third party but is
     # nonetheless inside `src/`.
     jshint:
-      src: [
-        '<%= app_files.js %>'
+      app: [
+        '<%= files.app.js %>'
       ]
       test: [
-        '<%= app_files.jsunit %>'
+        '<%= files.app.jsunit %>'
       ]
       gruntfile: [
         'Gruntfile.js'
+        'config/build.conf.js'
       ]
       options:
         curly: true
@@ -344,73 +182,296 @@ module.exports = (grunt) ->
     # CoffeeScript is not the default in ngBoilerplate, so we're just using
     # the defaults here.
     coffeelint:
-      src:
+      app:
         files:
-          src: [ '<%= app_files.coffee %>' ]
+          src: [ '<%= files.app.coffee %>' ]
       test:
         files:
-          src: [ '<%= app_files.coffeeunit %>' ]
+          src: [ '<%= files.app.coffeeunit %>' ]
+      gruntfile: [
+        'Gruntfile.coffee'
+        'config/build.conf.coffee'
+      ]
 
-    # HTML2JS is a Grunt plugin that takes all of your template files and
-    # places them into JavaScript files as strings that are added to
-    # AngularJS's template cache. This means that the templates too become
-    # part of the initial payload as one JavaScript file. Neat!
-    html2js:
-      # These are the templates from `src/app`.
-      app:
+    # `grunt coffee` compiles the CoffeeScript sources. To work well with the
+    # rest of the build, we have a separate compilation task for sources and
+    # specs so they can go to different places. For example, we need the
+    # sources to live with the rest of the copied JavaScript so we can include
+    # it in the final build, but we don't want to include our specs there.
+    coffee:
+      develop:
         options:
-          base: 'src'
-        src: [ '<%= app_files.atpl %>' ]
-        dest: '<%= build_dir %>/templates-app.js'
+          bare: true
+          sourceMap: true
+        expand: true
+        cwd: '.'
+        src: [ '<%= files.app.coffee %>' ]
+        dest: '<%= path.build.develop %>'
+        ext: '.js'
+      release:
+        options:
+          bare: true
+          join: true
+        expand: true
+        cwd: '.'
+        files:
+          '<%= path.build.release %><%= file.concat.js %>':
+            '<%= files.app.coffee %>'
+        ext: '.js'
 
-      # These are the templates from `src/common`.
-      common:
+
+    # `less` handles our LESS compilation and uglification automatically.
+    # Only our `main.less` file is included in compilation; all other files
+    # must be imported from this file.
+    # TODO: If *less* will do the `css` concat, remove `concat:css_develop`,
+    # *less* can compress! -- JR
+    less:
+      develop:
+        files:
+          '<%= path.build.develop %><%= file.less.css %>': [
+            '<%= files.app.less %>'
+            # '<%= files.vendor.css %>'
+          ]
         options:
-          base: 'src/common'
-        src: [ '<%= app_files.ctpl %>' ]
-        dest: '<%= build_dir %>/templates-common.js'
+          compress: false
+      release:
+        files:
+          '<%= path.build.release %><%= file.less.css %>': [
+            '<%= files.app.less %>'
+            '<%= files.vendor.css %>'
+          ]
+        options:
+          compress: true
+          cleancss: true
+
+    # `grunt concat` concatenates multiple source files into a single file.
+    concat:
+      # The `build_css` target concatenates compiled CSS and vendor CSS
+      # together.
+      css_release:
+        src: [
+          '<%= files.vendor.css %>'
+          '<%= path.build.release %><%= file.less.css %>'
+        ]
+        dest: '<%= path.build.release %><%= file.less.css %>'
+
+      # The `compile_js` target is the concatenation of our application source
+      # code and all specified vendor source code into a single file.
+      js_release:
+        options:
+          banner: '<%= meta.banner %>'
+        src: [
+          '<%= files.vendor.js %>'
+          '<%= path.base.config %>module.prefix'
+          # '<%= path.build.develop %><%= path.app.app %>**/*.js'
+          # TODO: If this works, remove the line above this note -- JR
+          '<%= path.build.release %><%= file.concat.js %>'
+          '<%= html2js.app.dest %>'
+          '<%= html2js.common.dest %>'
+          '<%= path.base.config %>module.suffix'
+        ]
+        dest: '<%= path.build.release %><%= file.concat.js %>'
+
+    # The `copy` task just copies files from A to B. We use it here to copy
+    # our project assets (images, fonts, etc.) and javascripts into
+    # `app.develop`, and then to copy the assets to `app.release`.
+    copy:
+      assets_app_develop:
+        files: [
+          {
+            src: [ '**' ]
+            dest: '<%= path.build.develop %><%= path.app.assets %>'
+            cwd: '<%= path.base.app %><%= path.app.assets %>'
+            expand: true
+          }
+          {
+            src: [ '<%= files.app.assets %>' ]
+            dest: '<%= path.build.develop %><%= path.app.assets %>'
+            cwd: '.'
+            expand: true
+            flatten: true
+          }
+        ]
+      assets_vendor_develop:
+        files: [
+          {
+            src: [ '<%= files.vendor.assets %>' ]
+            dest: '<%= path.build.develop %><%= path.app.assets %>'
+            cwd: '.'
+            expand: true
+            flatten: true
+          }
+        ]
+      js_app_develop:
+        files: [
+          {
+            src: [ '<%= files.app.js %>' ]
+            dest: '<%= path.build.develop %>'
+            cwd: '.'
+            expand: true
+          }
+        ]
+      js_vendor_develop:
+        files: [
+          {
+            src: [ '<%= files.vendor.js %>' ]
+            dest: '<%= path.build.develop %>'
+            cwd: '.'
+            expand: true
+          }
+        ]
+      js_test_develop:
+        files: [
+          {
+            src: [ '<%= files.test.js %>' ]
+            dest: '<%= path.build.develop %>'
+            cwd: '.'
+            expand: true
+          }
+        ]
+
+      assets_release:
+        files: [
+          {
+            src: [ '**' ]
+            dest: '<%= path.build.release %><%= path.app.assets %>'
+            cwd: '<%= path.base.app %><%= path.app.assets %>'
+            expand: true
+          }
+          {
+            src: [ '<%= files.app.assets %>' ]
+            dest: '<%= path.build.release %><%= path.app.assets %>'
+            cwd: '.'
+            expand: true
+            flatten: true
+          }
+          {
+            src: [ '<%= files.vendor.assets %>' ]
+            dest: '<%= path.build.develop %><%= path.app.assets %>'
+            cwd: '.'
+            expand: true
+            flatten: true
+          }
+        ]
 
     # The `index` task compiles the `index.html` file as a Grunt template. CSS
     # and JS files co-exist here but they get split apart later.
     index:
+      options:
+        index: '<%= file.base.html %>'
+        base: '<%= path.base.app %>'
 
       # During development, we don't want to have wait for compilation,
       # concatenation, minification, etc. So to avoid these steps, we simply
       # add all script files directly to the `<head>` of `index.html`. The
       # `src` property contains the list of included files.
-      build:
-        dir: '<%= build_dir %>'
+      develop:
+        dest: '<%= path.build.develop %>'
         src: [
-          '<%= vendor_files.js %>'
-          '<%= build_dir %>/src/**/*.js'
+          '<%= files.vendor.js %>'
+          '<%= path.build.develop %><%= path.base.app %>**/*.js'
           '<%= html2js.common.dest %>'
           '<%= html2js.app.dest %>'
-          '<%= vendor_files.css %>'
-          '<%= recess.build.dest %>'
+          '<%= files.vendor.css %>'
+          '<%= file.less.css %>'
         ]
 
       # When it is time to have a completely compiled application, we can
       # alter the above to include only a single JavaScript and a single CSS
       # file. Now we're back!
-      compile:
-        dir: '<%= compile_dir %>'
+      release:
+        dest: '<%= path.build.release %>'
         src: [
-          '<%= concat.compile_js.dest %>'
-          '<%= vendor_files.css %>'
-          '<%= recess.compile.dest %>'
+          '<%= concat.js_release.dest %>'
+          '<%= file.less.css %>'
+        ]
+
+    # `ng-min` annotates the sources before minifying. That is, it allows us
+    # to code without the array syntax.
+    ngmin:
+      release:
+        files: [
+          {
+            src: [ '<%= path.build.release %><%= file.concat.js %>' ]
+            dest: '<%= path.build.release %><%= file.concat.js %>'
+          }
+        ]
+
+    # Minify the sources!
+    uglify:
+      release:
+        options:
+          banner: '<%= meta.banner %>'
+          compress: true
+          mangle: true
+          preserveComments: false
+          report: 'min'
+        files: [
+          {
+            src: [ '<%= path.build.release %><%= file.concat.js %>' ]
+            dest: '<%= path.build.release %><%= file.concat.js %>'
+          }
         ]
 
     # This task compiles the karma template so that changes to its file array
     # don't have to be managed manually.
     karmaconfig:
+      options:
+        base: '<%= path.build.develop %>'
+        specs: '<%= files.app.coffeeunit %>'
+        template: '<%= file.karma.template %>'
+
       unit:
-        dir: '<%= build_dir %>'
+        dest: '<%= file.karma.config %>'
         src: [
-          '<%= vendor_files.js %>'
+          '<%= files.vendor.js %>'
           '<%= html2js.app.dest %>'
           '<%= html2js.common.dest %>'
-          '<%= test_files.js %>'
+          '<%= files.test.js %>'
         ]
+
+    # The Karma configurations.
+    karma:
+      unit:
+        configFile: '<%= file.karma.config %>'
+        autoWatch: false
+        singleRun: true
+
+      unit_auto:
+        configFile: '<%= file.karma.config %>'
+        autoWatch: true
+        singleRun: false
+
+      unit_coverage:
+        configFile: '<%= file.karma.config %>'
+        autoWatch: false
+        singleRun: true
+        reporters: [
+          'progress'
+          'coverage'
+        ]
+        preprocessors:
+          '<%= files.app.js %>': [ 'coverage' ]
+          '<%= files.app.coffee %>': [ 'coverage' ]
+
+        coverageReporter:
+          type: 'html'
+          dir: '<%= path.base.coverage %>'
+
+    # The Protractor configurations.
+    protractor:
+      options:
+        keepAlive: true
+        configFile: '<%= file.protractor.config %>'
+
+      singlerun: {}
+
+      auto:
+        keepAlive: true
+        options:
+          args:
+            seleniumPort: '<%= port.protractor %>'
+
 
     # And for rapid development, we have a watch set up that checks to see if
     # any of the files listed below change, and then to execute the listed
@@ -431,8 +492,13 @@ module.exports = (grunt) ->
       # When the Gruntfile changes, we just want to lint it. In fact, when
       # your Gruntfile changes, it will automatically be reloaded!
       gruntfile:
-        files: 'Gruntfile.js'
-        tasks: [ 'jshint:gruntfile' ]
+        files: [
+          '<%= files.grunt %>'
+        ]
+        tasks: [
+          'jshint:gruntfile'
+          'docs'
+        ]
         options:
           livereload: false
 
@@ -440,51 +506,77 @@ module.exports = (grunt) ->
       # run our unit tests.
       jssrc:
         files: [
-          '<%= app_files.js %>'
+          '<%= files.app.js %>'
         ]
-        tasks: [ 'jshint:src', 'karma:unit:run', 'copy:build_appjs' ]
+        tasks: [
+          'jshint:app'
+          'test:unit:run'
+          'copy:js_app_develop'
+          'docs'
+        ]
 
       # When our CoffeeScript source files change, we want to run lint them and
       # run our unit tests.
       coffeesrc:
         files: [
-          '<%= app_files.coffee %>'
+          '<%= files.app.coffee %>'
         ]
-        tasks: [ 'coffeelint:src', 'coffee:source', 'karma:unit:run', 'copy:build_appjs' ]
+        tasks: [
+          'coffeelint:app'
+          'coffee:develop'
+          'test:unit:run'
+          'copy:js_app_develop'
+          'docs'
+        ]
 
       # When assets are changed, copy them. Note that this will *not* copy new
       # files, so this is probably not very useful.
       assets:
         files: [
-          'src/assets/**/*'
+          '<%= path.base.app %><%= path.app.assets %>**/*'
         ]
-        tasks: [ 'copy:build_assets' ]
+        tasks: [
+          'copy:assets_app_develop'
+        ]
 
       # When index.html changes, we need to compile it.
       html:
-        files: [ '<%= app_files.html %>' ]
-        tasks: [ 'index:build' ]
+        files: [
+          '<%= files.app.html %>'
+        ]
+        tasks: [
+          'index:develop'
+        ]
 
       # When our templates change, we only rewrite the template cache.
       tpls:
         files: [
-          '<%= app_files.atpl %>'
-          '<%= app_files.ctpl %>'
+          '<%= files.app.atpl %>'
+          '<%= files.app.ctpl %>'
         ]
-        tasks: [ 'html2js' ]
+        tasks: [
+          'html2js'
+        ]
 
       # When the CSS files change, we need to compile and minify them.
       less:
-        files: [ 'src/**/*.less' ]
-        tasks: [ 'recess:build' ]
+        files: [
+          '<%= path.base.app %>**/*.less'
+        ]
+        tasks: [
+          'less:develop'
+        ]
 
       # When a JavaScript unit test file changes, we only want to lint it and
       # run the unit tests. We don't want to do any live reloading.
       jsunit:
         files: [
-          '<%= app_files.jsunit %>'
+          '<%= files.app.jsunit %>'
         ]
-        tasks: [ 'jshint:test', 'karma:unit:run' ]
+        tasks: [
+          'jshint:test'
+          'test:unit:run'
+        ]
         options:
           livereload: false
 
@@ -492,13 +584,18 @@ module.exports = (grunt) ->
       # run the unit tests. We don't want to do any live reloading.
       coffeeunit:
         files: [
-          '<%= app_files.coffeeunit %>'
+          '<%= files.app.coffeeunit %>'
         ]
-        tasks: [ 'coffeelint:test', 'karma:unit:run' ]
+        tasks: [
+          'coffeelint:test'
+          'test:unit:run'
+        ]
         options:
           livereload: false
 
   grunt.initConfig grunt.util._.extend taskConfig, userConfig
+
+  grunt.option 'target', "web" if not grunt.option('target')?
 
   # In order to make it safe to just compile or copy *only* what was changed,
   # we need to ensure we are starting from a clean, fresh build. So we rename
@@ -507,73 +604,129 @@ module.exports = (grunt) ->
   # before watching for changes.
   grunt.renameTask 'watch', 'delta'
   grunt.registerTask 'watch', [
-    'build'
-    'karma:unit'
+    'build:develop'
     'delta'
   ]
 
-  # The default task is to build and compile.
-  grunt.registerTask 'default', [
-    'build'
-    'compile'
+  # installation-related
+  grunt.registerTask 'init', [
+    'shell:bower_install'
+    'shell:protractor_install'
+  ]
+  grunt.registerTask 'update', [
+    # 'shell:npm_update'
+    'shell:bower_update'
+    'shell:protractor_install'
   ]
 
   # The `build` task gets your app ready to run for development and testing.
-  grunt.registerTask 'build', [
+  grunt.registerTask 'build:common', [
     'clean'
     'html2js'
     'jshint'
     'coffeelint'
-    'coffee'
-    'recess:build'
-    'concat:build_css'
-    'copy:build_app_assets'
-    'copy:build_vendor_assets'
-    'copy:build_appjs'
-    'copy:build_vendorjs'
-    'copy:build_testjs'
-    'index:build'
-    'karmaconfig'
-    'autotest'
   ]
 
-  # The `compile` task gets your app ready for deployment by concatenating and
-  # minifying your code.
-  grunt.registerTask 'compile', [
-    'recess:compile'
-    'copy:compile_assets'
+  # The `build` task gets your app ready to run for development and testing.
+  grunt.registerTask 'build:develop', [
+    'build:common'
+    'coffee:develop'
+    'less:develop'
+    'copy:assets_app_develop'
+    'copy:assets_vendor_develop'
+    'copy:js_app_develop'
+    'copy:js_vendor_develop'
+    'copy:js_test_develop'
+    'index:develop'
+    'test:unit'
+  ]
+
+  # The `build` task gets your app ready to run for development and testing.
+  grunt.registerTask 'build:release', [
+    'build:common'
+    'coffee:release'
+    'less:release'
+    'concat:css_release'
+    'copy:assets_release'
     'ngmin'
-    'concat:compile_js'
+    'concat:js_release'
     'uglify'
-    'index:compile'
+    'index:release'
+  ]
+
+  grunt.registerTask 'build', [
+    # 'update'
+    'build:develop'
+    'build:release'
   ]
 
   # single run tests
-  grunt.registerTask 'test', ['jshint','test:unit', 'test:e2e']
-  grunt.registerTask 'test:unit', ['karma:unit']
-  grunt.registerTask 'test:e2e', ['connect:testserver','protractor:singlerun']
+  grunt.registerTask 'test', [
+    'jshint'
+    'test:unit'
+    'test:e2e'
+  ]
+  grunt.registerTask 'test:unit', [
+    'karmaconfig'
+    'karma:unit'
+  ]
+  grunt.registerTask 'test:e2e', [
+    'connect:test'
+    'shell:selenium'
+    'protractor:singlerun'
+    'shell:selenium:kill'
+  ]
 
   # autotest and watch tests
-  grunt.registerTask 'autotest', ['karma:unit_auto']
-  grunt.registerTask 'autotest:unit', ['karma:unit_auto']
-  grunt.registerTask 'autotest:e2e', ['connect:testserver','shell:selenium','watch:protractor']
+  grunt.registerTask 'autotest', [
+    'karma:unit_auto'
+  ]
+  grunt.registerTask 'autotest:unit', [
+    'karma:unit_auto'
+  ]
+  grunt.registerTask 'autotest:e2e', [
+    'connect:test'
+    'shell:selenium'
+    'watch:protractor'
+    'shell:selenium:kill'
+  ]
 
   # coverage testing
-  grunt.registerTask 'test:coverage', ['karma:unit_coverage']
-  grunt.registerTask 'coverage', ['karma:unit_coverage','open:coverage','connect:coverage']
-
-  # installation-related
-  grunt.registerTask 'install', ['update','shell:protractor_install']
-  grunt.registerTask 'update', ['shell:npm_install', 'concat']
-
-  # defaults
-  grunt.registerTask 'default', ['dev']
+  grunt.registerTask 'test:coverage', [
+    'karma:unit_coverage'
+  ]
+  grunt.registerTask 'coverage', [
+    'karma:unit_coverage'
+    'open:coverage'
+    'connect:coverage'
+  ]
 
   # development
-  grunt.registerTask 'dev', ['update', 'connect:devserver', 'open:devserver', 'watch:assets']
+  grunt.registerTask 'develop', [
+    'connect:develop'
+    'watch'
+  ]
 
-  # server daemon
-  grunt.registerTask 'serve', ['connect:webserver']
+  grunt.registerTask 'develop:serve', [
+    'build:develop'
+    'connect:develop'
+    'open:develop'
+    'watch'
+  ]
+
+  # documentation
+  grunt.registerTask 'docs', [
+    'docco'
+  ]
+
+  # The default task is to `update` and `build` all versions.
+  grunt.registerTask 'default', [
+    'build'
+    'docs'
+    'open:release'
+    'connect:release'
+  ]
+
 
   # A utility function to get all app JavaScript sources.
   filterForJS = (files) ->
@@ -590,28 +743,39 @@ module.exports = (grunt) ->
   # the list into variables for the template to use and then runs the
   # compilation.
   grunt.registerMultiTask 'index', 'Process index.html template', ->
-    dirRE = new RegExp "^(#{grunt.config 'build_dir'}|#{grunt.config 'compile_dir'})\/", 'g'
+    options = @options
+      base: ''
+      index: 'index.html'
+
+    path = grunt.config "path.build.#{@target}"
+    dirRE = new RegExp "^#{path}", 'g'
     jsFiles = filterForJS(@filesSrc).map (file) -> file.replace dirRE, ''
     cssFiles = filterForCSS(@filesSrc).map (file) -> file.replace dirRE, ''
 
-    grunt.file.copy 'src/index.html', "#{@data.dir}/index.html",
+    jsFiles.push 'phonegap.js' if grunt.option('target')?
+
+    grunt.file.copy "#{options.base}#{options.index}",
+      "#{@data.dest}#{options.index}",
       process: (contents, path) ->
         grunt.template.process contents,
-          data:
+          _.extend grunt.config.data,
             scripts: jsFiles
-            styles: cssFiles
-            version: grunt.config 'pkg.version'
 
-  # In order to avoid having to specify manually the files needed for karma to
+  # In order to avoid having to manually specify the files needed for karma to
   # run, we use grunt to manage the list for us. The `karma/*` files are
   # compiled as grunt templates for use by Karma. Yay!
   grunt.registerMultiTask 'karmaconfig', 'Process karma config templates', ->
-    dirRE = new RegExp "^(#{@files[0].dir})\/", 'g'
+    options = @options
+      base: ''
+      config: 'karma-unit.js'
+      template: 'karma-unit.tpl.js'
+
+    dirRE = new RegExp "^#{options.base}", 'g'
     jsFiles = filterForJS(@filesSrc).map (file) -> file.replace dirRE, ''
 
-    grunt.file.copy 'config/karma-unit.tpl.coffee', "#{grunt.config 'build_dir'}/karma-unit.coffee",
+    grunt.file.copy options.template, @data.dest,
       process: (contents, path) ->
         grunt.template.process contents,
-          data:
-            specs: grunt.config 'app_files.coffeeunit'
+          _.extend grunt.config.data,
             scripts: jsFiles
+            specs: options.specs

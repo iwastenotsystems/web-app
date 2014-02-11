@@ -9,13 +9,13 @@ module.exports = (config) ->
       <% }); %>
       <% specs.forEach( function ( file ) { %>'<%= file %>'
       <% }); %>
-      'src/**/*.js'
-      'src/**/*.coffee'
-      'tests/**/*.js'
-      'tests/**/*.coffee'
+      '<%= path.base.app %>**/*.js'
+      '<%= path.base.app %>**/*.coffee'
+      '<%= path.base.tests %>**/*.js'
+      '<%= path.base.tests %>**/*.coffee'
     ]
     exclude: [
-      'src/assets/**/*.js'
+      '<%= path.base.app %><%= path.app.assets %>**/*.js'
     ]
     frameworks: [ 'jasmine' ]
     plugins: [
