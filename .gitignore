@@ -3,6 +3,7 @@ node_modules
 vendor
 docs
 logs/*
+tmp
 
 # Sublime Text editor files
 *.sublime-*
