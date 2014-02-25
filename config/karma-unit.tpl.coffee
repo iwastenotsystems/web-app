@@ -7,14 +7,9 @@ module.exports = (config) ->
     # **Note:** Makes assumptions about the structure of both
     #           *`files.app.js`* and *`files.app.coffee`*.
     files: [
-      <% scripts.forEach( function ( file ) { %>'<%= file %>'
-      <% }); %>
-      <% specs.forEach( function ( file ) { %>'<%= file %>'
-      <% }); %>
-      '<%= path.base.app %>**/*.js'
-      '<%= path.base.app %>**/*.coffee'
-      '<%= path.base.tests %>**/*.js'
-      '<%= path.base.tests %>**/*.coffee'
+      <%= toQuotedString(scripts, '\n      ') %>
+      <%= toQuotedString(_.flatten(spec), '\n      ') %>
+      '<%= files.app.js[0] %>'
     ]
     exclude: [
       '<%= path.base.app %><%= path.app.assets %>**/*.js'

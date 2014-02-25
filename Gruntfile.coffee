@@ -9,6 +9,9 @@ module.exports = (grunt) ->
 
   _ = require 'lodash'
 
+  toQuotedString = (array, separator = ', ', quoter = (str) -> "'#{str}'") ->
+    _.map(array, quoter).join separator
+
   # Load required Grunt tasks. These are installed based on the versions listed
   # in `package.json` when you do `npm install` in this directory.
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks)
@@ -770,12 +773,15 @@ module.exports = (grunt) ->
       config: 'karma-unit.js'
       template: 'karma-unit.tpl.js'
 
-    dirRE = new RegExp "^#{options.base}", 'g'
-    jsFiles = filterForJS(@filesSrc).map (file) -> file.replace dirRE, ''
+    options = _.assign @options(), @data
+
+    options.scripts = filterForJS(_.flatten @filesSrc).map (file) ->
+      file.replace new RegExp("^#{options.base}", 'g'), ''
+
+    options.toQuotedString = toQuotedString
+    options = _.assign grunt.config.data, options
 
     grunt.file.copy options.template, @data.dest,
       process: (contents, path) ->
-        grunt.template.process contents,
-          _.extend grunt.config.data,
-            scripts: jsFiles
-            specs: options.specs
+        grunt.template.process contents, options
+
