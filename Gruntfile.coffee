@@ -820,9 +820,3 @@ module.exports = (grunt) ->
     grunt.file.copy options.template, @data.dest,
       process: (contents, path) ->
         grunt.template.process contents, options
-
-
-  grunt.registerMultiTask 'jr', 'Jon\'s Test', ->
-    console.dir process.env.SELENIUM_LAUNCHER_PORT
-
-
