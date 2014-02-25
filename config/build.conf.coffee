@@ -11,7 +11,7 @@ module.exports =
       build: 'build/'
       config: 'config/'
       docs: 'docs/'
-      tests: 'tests/'
+      spec: 'spec/'
       vendor: 'vendor/'
       vendorPrivate: 'vendor-private/'
 
@@ -21,6 +21,9 @@ module.exports =
       common: 'common/'
       coverage: 'coverage/'
       less: 'less/'
+      spec:
+        unit: 'unit/'
+        e2e: 'e2e/'
       target:
         web: 'web/'
         phonegap: 'phonegap/'
@@ -60,7 +63,8 @@ module.exports =
       template: '<%= path.base.config %>karma-unit.tpl.coffee'
 
     protractor:
-      config: '<%= path.base.config %>protractor-e2e.conf.js'
+      config: '<%= path.build.develop %>protractor-e2e.conf.js'
+      template: '<%= path.base.config %>protractor-e2e.tpl.js'
 
 
   # The banner is the comment that is placed at the top of our compiled
@@ -89,6 +93,7 @@ module.exports =
     release: 8001
     test: 9001
     coverage: 5001
+    karma: 9876
     protractor: 4444
 
   files:
@@ -110,32 +115,43 @@ module.exports =
         '!<%= path.base.app %>/**/*.spec.js'
         '!<%= path.base.app %><%= path.app.assets %>**/*.js'
       ]
+      coffee: [
+        '<%= path.base.app %>**/*.coffee'
+        '!<%= path.base.app %>**/*.spec.coffee'
+      ]
       assets: [
         '<%= file.readme %>'
         'bower.json'
       ]
 
-      jsunit: [
-        '<%= path.base.app %>**/*.spec.js'
-        '<%= path.base.tests %>unit/**/*.spec.js'
-      ]
+      spec:
+        unit:
+          js: [
+            '<%= path.base.app %>**/*.unit.spec.js'
+            '<%= path.base.spec %><%= path.app.spec.unit %>**/*.spec.js'
+          ]
+          coffee: [
+            '<%= path.base.app %>**/*.unit.spec.coffee'
+            '<%= path.base.spec %><%= path.app.spec.unit %>**/*.spec.coffee'
+          ]
+        e2e:
+          js: [
+            '<%= path.base.app %>**/*.e2e.spec.js'
+            '<%= path.base.spec %><%= path.app.spec.e2e %>**/*.spec.js'
+          ]
+          coffee: [
+            '<%= path.base.app %>**/*.e2e.spec.coffee'
+            '<%= path.base.spec %><%= path.app.spec.e2e %>**/*.spec.coffee'
+          ]
 
-      coffee: [
-        '<%= path.base.app %>**/*.coffee'
-        '!<%= path.base.app %>**/*.spec.coffee'
-      ]
-      coffeeunit: [
-        '<%= path.base.app %>**/*.spec.coffee'
-        '<%= path.base.tests %>unit/**/*.spec.coffee'
-      ]
-
-      ctpl: [
-        '<%= path.base.app %><%= path.app.common %>**/*.tpl.html'
-      ]
-      atpl: [
-        '<%= path.base.app %>**/*.tpl.html'
-        '!<%= files.app.ctpl %>'
-      ]
+      templates:
+        app: [
+          '<%= path.base.app %>**/*.tpl.html'
+          '!<%= files.app.templates.common %>'
+        ]
+        common: [
+          '<%= path.base.app %><%= path.app.common %>**/*.tpl.html'
+        ]
 
       html: [
         '<%= path.base.app %><%= file.base.html %>'
@@ -184,12 +200,16 @@ module.exports =
       ]
 
 
-    test:
-      js: [
-        '<%= files.app.jsunit %>'
-        '<%= files.app.coffeeunit %>'
     # This is a collection of files used during testing only.
+    spec:
+      unit: [
         '<%= path.base.vendor %>angular-mocks/angular-mocks.js'
+        '<%= files.app.spec.unit.js %>'
+        '<%= files.app.spec.unit.coffee %>'
+      ]
+      e2e: [
+        '<%= files.app.spec.e2e.js %>'
+        '<%= files.app.spec.e2e.coffee %>'
       ]
 
   # PhoneGap configuration

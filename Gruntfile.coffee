@@ -144,14 +144,14 @@ module.exports = (grunt) ->
       app:
         options:
           base: '<%= path.base.app %>'
-        src: [ '<%= files.app.atpl %>' ]
+        src: [ '<%= files.app.templates.app %>' ]
         dest: '<%= path.build.develop %>templates-app.js'
 
       # These are the templates from `src/common`.
       common:
         options:
           base: '<%= path.base.app %><%= path.app.common %>'
-        src: [ '<%= files.app.ctpl %>' ]
+        src: [ '<%= files.app.templates.common %>' ]
         dest: '<%= path.build.develop %>templates-common.js'
 
     # `jshint` defines the rules of our linter as well as which files we
@@ -164,8 +164,11 @@ module.exports = (grunt) ->
       app: [
         '<%= files.app.js %>'
       ]
-      test: [
-        '<%= files.app.jsunit %>'
+      spec_unit: [
+        '<%= files.app.spec.unit.js %>'
+      ]
+      spec_e2e: [
+        '<%= files.app.spec.e2e.js %>'
       ]
       gruntfile: [
         'Gruntfile.js'
@@ -188,9 +191,12 @@ module.exports = (grunt) ->
       app:
         files:
           src: [ '<%= files.app.coffee %>' ]
-      test:
+      spec_unit:
         files:
-          src: [ '<%= files.app.coffeeunit %>' ]
+          src: [ '<%= files.app.spec.unit.coffee %>' ]
+      spec_e2e:
+        files:
+          src: [ '<%= files.app.spec.e2e.coffee %>' ]
       gruntfile: [
         'Gruntfile.coffee'
         'config/build.conf.coffee'
@@ -251,7 +257,7 @@ module.exports = (grunt) ->
     concat:
       # The `build_css` target concatenates compiled CSS and vendor CSS
       # together.
-      css_release:
+      release_css:
         src: [
           '<%= files.vendor.css %>'
           '<%= path.build.release %><%= file.less.css %>'
@@ -260,7 +266,7 @@ module.exports = (grunt) ->
 
       # The `compile_js` target is the concatenation of our application source
       # code and all specified vendor source code into a single file.
-      js_release:
+      release_js:
         options:
           banner: '<%= meta.banner %>'
         src: [
@@ -279,7 +285,7 @@ module.exports = (grunt) ->
     # our project assets (images, fonts, etc.) and javascripts into
     # `app.develop`, and then to copy the assets to `app.release`.
     copy:
-      assets_app_develop:
+      develop_assets_app:
         files: [
           {
             src: [ '**' ]
@@ -295,7 +301,7 @@ module.exports = (grunt) ->
             flatten: true
           }
         ]
-      assets_vendor_develop:
+      develop_assets_vendor:
         files: [
           {
             src: [ '<%= files.vendor.assets %>' ]
@@ -305,7 +311,7 @@ module.exports = (grunt) ->
             flatten: true
           }
         ]
-      js_app_develop:
+      develop_app_js:
         files: [
           {
             src: [ '<%= files.app.js %>' ]
@@ -314,7 +320,7 @@ module.exports = (grunt) ->
             expand: true
           }
         ]
-      js_vendor_develop:
+      develop_vendor_js:
         files: [
           {
             src: [ '<%= files.vendor.js %>' ]
@@ -323,17 +329,20 @@ module.exports = (grunt) ->
             expand: true
           }
         ]
-      js_test_develop:
+      develop_spec:
         files: [
           {
-            src: [ '<%= files.test.js %>' ]
+            src: [
+              '<%= files.spec.unit %>'
+              '<%= files.spec.e2e %>'
+            ]
             dest: '<%= path.build.develop %>'
             cwd: '.'
             expand: true
           }
         ]
 
-      assets_release:
+      release_assets:
         files: [
           {
             src: [ '**' ]
@@ -385,7 +394,7 @@ module.exports = (grunt) ->
       release:
         dest: '<%= path.build.release %>'
         src: [
-          '<%= concat.js_release.dest %>'
+          '<%= concat.release_js.dest %>'
           '<%= file.less.css %>'
         ]
 
@@ -418,19 +427,32 @@ module.exports = (grunt) ->
 
     # This task compiles the karma template so that changes to its file array
     # don't have to be managed manually.
-    karmaconfig:
+    config:
       options:
         base: '<%= path.build.develop %>'
-        specs: '<%= files.app.coffeeunit %>'
-        template: '<%= file.karma.template %>'
 
       unit:
+        template: '<%= file.karma.template %>'
+        spec: '<%= files.spec.unit %>'
         dest: '<%= file.karma.config %>'
         src: [
           '<%= files.vendor.js %>'
           '<%= html2js.app.dest %>'
           '<%= html2js.common.dest %>'
-          '<%= files.test.js %>'
+          '<%= files.app.spec.unit.js %>'
+          '<%= files.app.spec.unit.coffee %>'
+        ]
+
+      e2e:
+        template: '<%= file.protractor.template %>'
+        spec: '<%= files.spec.e2e %>'
+        dest: '<%= file.protractor.config %>'
+        src: [
+          '<%= files.vendor.js %>'
+          '<%= html2js.app.dest %>'
+          '<%= html2js.common.dest %>'
+          '<%= files.app.spec.e2e.js %>'
+          '<%= files.app.spec.e2e.coffee %>'
         ]
 
     # The Karma configurations.
@@ -459,7 +481,7 @@ module.exports = (grunt) ->
 
         coverageReporter:
           type: 'html'
-          dir: '<%= path.base.coverage %>'
+          dir: '<%= path.app.coverage %>'
 
     # The Protractor configurations.
     protractor:
@@ -507,20 +529,20 @@ module.exports = (grunt) ->
 
       # When our JavaScript source files change, we want to run lint them and
       # run our unit tests.
-      jssrc:
+      src_js:
         files: [
           '<%= files.app.js %>'
         ]
         tasks: [
           'jshint:app'
           'test:unit:run'
-          'copy:js_app_develop'
+          'copy:develop_app_js'
           'docs'
         ]
 
       # When our CoffeeScript source files change, we want to run lint them and
       # run our unit tests.
-      coffeesrc:
+      src_coffee:
         files: [
           '<%= files.app.coffee %>'
         ]
@@ -528,7 +550,7 @@ module.exports = (grunt) ->
           'coffeelint:app'
           'coffee:develop'
           'test:unit:run'
-          'copy:js_app_develop'
+          'copy:develop_app_js'
           'docs'
         ]
 
@@ -552,10 +574,10 @@ module.exports = (grunt) ->
         ]
 
       # When our templates change, we only rewrite the template cache.
-      tpls:
+      templates:
         files: [
-          '<%= files.app.atpl %>'
-          '<%= files.app.ctpl %>'
+          '<%= files.app.templates.app %>'
+          '<%= files.app.templates.common %>'
         ]
         tasks: [
           'html2js'
@@ -572,12 +594,12 @@ module.exports = (grunt) ->
 
       # When a JavaScript unit test file changes, we only want to lint it and
       # run the unit tests. We don't want to do any live reloading.
-      jsunit:
+      unit_js:
         files: [
-          '<%= files.app.jsunit %>'
+          '<%= files.app.spec.unit.js %>'
         ]
         tasks: [
-          'jshint:test'
+          'jshint:spec_unit'
           'test:unit:run'
         ]
         options:
@@ -585,13 +607,39 @@ module.exports = (grunt) ->
 
       # When a CoffeeScript unit test file changes, we only want to lint it and
       # run the unit tests. We don't want to do any live reloading.
-      coffeeunit:
+      unit_coffee:
         files: [
-          '<%= files.app.coffeeunit %>'
+          '<%= files.app.spec.unit.coffee %>'
         ]
         tasks: [
-          'coffeelint:test'
+          'coffeelint:spec_unit'
           'test:unit:run'
+        ]
+        options:
+          livereload: false
+
+      # When a JavaScript e2e test file changes, we only want to lint it and
+      # run the e2e tests. We don't want to do any live reloading.
+      e2e_js:
+        files: [
+          '<%= files.app.spec.e2e.js %>'
+        ]
+        tasks: [
+          'jshint:spec_e2e'
+          'test:e2e:run'
+        ]
+        options:
+          livereload: false
+
+      # When a CoffeeScript e2e test file changes, we only want to lint it and
+      # run the e2e tests. We don't want to do any live reloading.
+      e2e_coffee:
+        files: [
+          '<%= files.app.spec.e2e.coffee %>'
+        ]
+        tasks: [
+          'coffeelint:spec_e2e'
+          'test:e2e:run'
         ]
         options:
           livereload: false
@@ -614,17 +662,14 @@ module.exports = (grunt) ->
   # installation-related
   grunt.registerTask 'init', [
     'shell:bower_install'
-    'shell:protractor_install'
   ]
   grunt.registerTask 'update', [
     # 'shell:npm_update'
     'shell:bower_update'
-    'shell:protractor_install'
   ]
 
   # The `build` task gets your app ready to run for development and testing.
   grunt.registerTask 'build:common', [
-    'clean'
     'html2js'
     'jshint'
     'coffeelint'
@@ -632,27 +677,29 @@ module.exports = (grunt) ->
 
   # The `build` task gets your app ready to run for development and testing.
   grunt.registerTask 'build:develop', [
+    'clean:develop'
     'build:common'
     'coffee:develop'
     'less:develop'
-    'copy:assets_app_develop'
-    'copy:assets_vendor_develop'
-    'copy:js_app_develop'
-    'copy:js_vendor_develop'
-    'copy:js_test_develop'
+    'copy:develop_assets_app'
+    'copy:develop_assets_vendor'
+    'copy:develop_app_js'
+    'copy:develop_vendor_js'
+    'copy:develop_spec'
     'index:develop'
-    'test:unit'
+    'test'
   ]
 
   # The `build` task gets your app ready to run for development and testing.
   grunt.registerTask 'build:release', [
+    'clean:release'
     'build:common'
     'coffee:release'
     'less:release'
-    'concat:css_release'
-    'copy:assets_release'
+    'concat:release_css'
+    'copy:release_assets'
     'ngmin'
-    'concat:js_release'
+    'concat:release_js'
     'uglify'
     'index:release'
   ]
@@ -670,14 +717,14 @@ module.exports = (grunt) ->
     'test:e2e'
   ]
   grunt.registerTask 'test:unit', [
-    'karmaconfig'
+    'config'
     'karma:unit'
   ]
   grunt.registerTask 'test:e2e', [
     'connect:test'
-    'shell:selenium'
+    'selenium-launch'
+    'config:e2e'
     'protractor:singlerun'
-    'shell:selenium:kill'
   ]
 
   # autotest and watch tests
@@ -688,10 +735,9 @@ module.exports = (grunt) ->
     'karma:unit_auto'
   ]
   grunt.registerTask 'autotest:e2e', [
-    'connect:test'
-    'shell:selenium'
+    # 'connect:test'
+    # 'selenium-launch'
     'watch:protractor'
-    'shell:selenium:kill'
   ]
 
   # coverage testing
@@ -767,7 +813,7 @@ module.exports = (grunt) ->
   # In order to avoid having to manually specify the files needed for karma to
   # run, we use grunt to manage the list for us. The `karma/*` files are
   # compiled as grunt templates for use by Karma. Yay!
-  grunt.registerMultiTask 'karmaconfig', 'Process karma config templates', ->
+  grunt.registerMultiTask 'config', 'Process karma config templates', ->
     options = @options
       base: ''
       config: 'karma-unit.js'
@@ -784,4 +830,9 @@ module.exports = (grunt) ->
     grunt.file.copy options.template, @data.dest,
       process: (contents, path) ->
         grunt.template.process contents, options
+
+
+  grunt.registerMultiTask 'jr', 'Jon\'s Test', ->
+    console.dir process.env.SELENIUM_LAUNCHER_PORT
+
 
