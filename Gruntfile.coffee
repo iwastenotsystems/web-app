@@ -121,9 +121,9 @@ module.exports = (grunt) ->
         }
 
     # The directories to delete when `grunt clean` is executed.
-    clean: [
-      '<%= path.build.target %>*'
-    ]
+    clean:
+      develop: [ '<%= path.build.develop %>' ]
+      release: [ '<%= path.build.release %>' ]
 
     # HTML2JS is a Grunt plugin that takes all of your template files and
     # places them into JavaScript files as strings that are added to
