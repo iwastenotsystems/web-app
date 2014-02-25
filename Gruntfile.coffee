@@ -58,16 +58,6 @@ module.exports = (grunt) ->
       options:
         stdout: true
 
-      selenium:
-        # command: './selenium/start'
-        command: 'node_modules/protractor/bin/webdriver-manager start'
-        options:
-          stdout: false
-          async: true
-
-      protractor_install:
-        command: 'node_modules/protractor/bin/webdriver-manager update'
-
       bower_install:
         command: 'bower install'
 
