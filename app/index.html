@@ -4,18 +4,15 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="<%= pkg.name %> - <%= pkg.description %>">
+    <meta name="author" content="<%= pkg.author %>">
 
     <link rel="shortcut icon" href="assets/images/icon.ico">
 
     <title data-ng-bind="manifest.name"></title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="vendor/bootstrap-bower/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="assets/css/app.css" rel="stylesheet">
+    <!-- compiled CSS -->
+    <link rel="stylesheet" type="text/css" href="<%= file.less.css %>" />
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -25,9 +22,11 @@
   </head>
 
   <body>
-    <div class="navbar navbar-fixed-top navbar-inverse" role="navigation" data-ng-controller="myApp.navbarController">
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation" data-ng-controller="myApp.navbarController">
 
       <div class="container">
+
+        <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-ng-init="navCollapsed = true" data-ng-click="navCollapsed = !navCollapsed">
             <span class="sr-only">Toggle navigation</span>
@@ -38,12 +37,13 @@
           <a class="navbar-brand" href="" data-ng-controller="myApp.manifestController" data-ng-bind="manifest.name"></a>
         </div>
 
+        <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" data-ng-class="!navCollapsed && 'in'">
           <ul class="nav navbar-nav">
             <li><a href="" data-ng-click="openModal()">Modal</a></li>
             <li><a href="" data-ng-click="openAbout()">About</a></li>
           </ul>
-          <form class="navbar-form navbar-right">
+          <!--form class="navbar-form navbar-right" role="form">
             <div class="form-group">
               <input type="text" placeholder="Email" class="form-control">
             </div>
@@ -51,7 +51,7 @@
               <input type="password" placeholder="Password" class="form-control">
             </div>
             <button type="submit" class="btn btn-success">Sign in</button>
-          </form>
+          </form-->
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container -->
 
@@ -66,8 +66,12 @@
 
           <div class="jumbotron">
             <div class="container">
-              
-              
+
+              <div class="container">
+                <h1><%= pkg.name %></h1>
+                <p><%= pkg.description %></p>
+              </div>
+
             </div>
           </div>
           <!-- Placeholder for views -->
@@ -75,53 +79,36 @@
         </div><!--/span-->
 
         <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
-          <div class="well sidebar-nav">
-          </div><!--/.well -->
+          <div class="list-group">
+             <a href="#" class="list-group-item active">Link</a>
+             <a href="#" class="list-group-item">Link</a>
+             <a href="#" class="list-group-item">Link</a>
+             <a href="#" class="list-group-item">Link</a>
+             <a href="#" class="list-group-item">Link</a>
+             <a href="#" class="list-group-item">Link</a>
+             <a href="#" class="list-group-item">Link</a>
+             <a href="#" class="list-group-item">Link</a>
+             <a href="#" class="list-group-item">Link</a>
+             <a href="#" class="list-group-item">Link</a>
+           </div>
         </div><!--/span-->
       </div><!--/row-->
 
       <hr>
 
-      <footer data-ng-controller_="myApp.manifestController">
-        <p>&copy; Company 2013</p>
+      <footer data-ng-controller="myApp.manifestController">
+        <p>&copy; 2014 <span data-ng-repeat="author in manifest.authors">
+            <span data-ng-bind-html="author | markdown"></span>
+          </span></p>
+        <ul data-ng-repeat="license in manifest.license">
+          <li data-ng-bind-html="license | markdown"></li>
+        </ul>
       </footer>
 
     </div><!--/.container-->
 
-        <!-- Vendor Libs -->
-    <!-- Min
-    <script src="vendor/angular/angular.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="vendor/angular-route/angular-route.js" type="text/javascript" charset="utf-8"></script>
-    <script src="vendor/angular-resource/angular-resource.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="vendor/angular-animate/angular-animate.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="vendor/bootstrap/assets/js/jquery.js" type="text/javascript" charset="utf-8"></script>
-    <script src="vendor/bootstrap/dist/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="vendor/angular-ui-bootstrap-bower/ui-bootstrap-tpls.min.js" type="text/javascript" charset="utf-8"></script>
-    -->
-
-    <!-- Dist -->
-    <script src="vendor/angular/angular.js" type="text/javascript" charset="utf-8"></script>
-    <script src="vendor/angular-animate/angular-animate.js" type="text/javascript" charset="utf-8"></script>
-    <script src="vendor/angular-resource/angular-resource.js" type="text/javascript" charset="utf-8"></script>
-    <script src="vendor/angular-route/angular-route.js" type="text/javascript" charset="utf-8"></script>
-    <script src="vendor/angular-sanitize/angular-sanitize.js" type="text/javascript" charset="utf-8"></script>
-    <!--script src="vendor/jquery/jquery.js" type="text/javascript" charset="utf-8"></script>
-    <script src="vendor/bootstrap.css/js/bootstrap.js" type="text/javascript" charset="utf-8"></script-->
-    <script src="vendor/angular-ui-bootstrap3/ui-bootstrap-tpls.js" type="text/javascript" charset="utf-8"></script>
-    <!-- -->
-
-    <!-- Markdown libs -->
-    <script src="vendor/marked/lib/marked.js" type="text/javascript" charset="utf-8"></script>
-
-    <!-- Yaml libs -->
-    <script src="vendor/yaml.js" type="text/javascript" charset="utf-8"></script>
-
-    <!-- App libs -->
-    <script src="dist/app.js"></script>
-    <script src="dist/services/services.js" type="text/javascript" charset="utf-8"></script>
-    <script src="dist/controllers/controllers.js" type="text/javascript" charset="utf-8"></script>
-    <script src="dist/filters/filters.js" type="text/javascript" charset="utf-8"></script>
-
+    <!-- compiled JavaScript --><% scripts.forEach( function ( file ) { %>
+    <script type="text/javascript" src="<%= file %>"></script><% }); %>
 
   </body>
 </html>

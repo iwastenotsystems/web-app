@@ -1,7 +1,7 @@
 Title:    Web Application Framework  
 Subtitle: Using CoffeeScript, AngularJS, Twitter Bootstrap and PhoneGap  
 Keywords: [#CoffeeScript, #AngularJS, #Bootstrap, #PhoneGap, #SinglePageApplication, #SPA, #SPI, #application, #framework]  
-Author:   "[Jon Ruttan](jonruttan@gmail.com)"  
+Author:   "[Jon Ruttan](jonruttan@iwastenotsystems.com)"  
 Date:     2013-10-21  
 Revision: 3 (2014-01-15)  
 License:  "[The MIT License](http://opensource.org/licenses/MIT)"  
@@ -20,19 +20,34 @@ An *[AngularJS] and [Bootstrap] application framework* written in [CoffeeScript]
 [Bower]: http://bower.io/
 [PhoneGap]: http://phonegap.com/
 
+> A [Grunt](http://gruntjs.com/) plugin to provide local build tasks for [Phonegap](http://phonegap.com/) applications
+
 ## Quick Start
 
-Install Node.js and Git, then:
+First, install [Git] and [Node.js], then:
 
-    git clone git://github.com/iwastenotsystems/web-app
-    cd web-app
-    sudo npm -g install coffeescript grunt-cli karma bower
-    npm install
-    bower install
-    cake build
-    cake serve
+```bash
+# Clone the *Web App* repository
+git clone https://github.com/iwastenotsystems/web-app
 
-Finally, open `http://localhost:8000/app` in your browser.
+# Descend into the `web-app` directory
+cd web-app
+
+# Install [Node.js] *Global* dependencies
+sudo npm install -g coffeescript grunt-cli bower
+
+# Install [Node.js] *Local* dependencies
+npm install
+
+# Run *Grunt* *`init`* task to finish the installation.
+# Installs *Web* dependencies using *Bower* package manager
+grunt init
+
+# Run the *default* task, build the *develop* and *release* versions of the
+# web app, build the docs, start a web server and open the *release* version
+# in a browser.
+grunt
+```
 
 ## Requirements
 
@@ -106,11 +121,11 @@ This will put the `bower` command in your system path, allowing it to be run fro
 
 ## Development
 
-Move the project's root directory and issue
+Move to the project's root directory and issue:
 
-    cake watch
+    grunt develop
 
-to have the *`cake`* build tool watch the *src/* directory for changes and issue compile commands to create the corresponding JavaScript code in the *lib/* directory.
+to have the *`Grunt`* build tool watch the *app/* directory for changes and issue compile commands to create the corresponding JavaScript code in the *build/* directory.
 
 ---
 

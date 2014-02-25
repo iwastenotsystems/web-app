@@ -4,11 +4,11 @@
 
 # Create a new module called *myApp.controllers* to act as a container
 # for the application controllers.
-myAppControllers = angular.module('myApp.controllers', []);
+myAppControllers = angular.module 'myApp.controllers', []
 
 
 # ## myApp.manifestController
-# 
+#
 # *myApp.manifestController* provides the Application's manifest data
 # which is retreived via the *myApp.manifestService* object.
 myAppControllers.controller 'myApp.manifestController', [
@@ -20,7 +20,7 @@ myAppControllers.controller 'myApp.manifestController', [
 
 
 # ## myApp.staticContentController
-# 
+#
 # *myApp.staticContentController* provides static content retreived via an
 # $http get request.
 myAppControllers.controller 'myApp.staticContentController', [
@@ -29,21 +29,21 @@ myAppControllers.controller 'myApp.staticContentController', [
   '$http'
   ($scope, $routeParams, $http) ->
 
-    # The *$routeProvider* route path specified an optional named group 
+    # The *$routeProvider* route path specified an optional named group
     # parameter, *`url`*. When available use that value for the Url, otherwise
     # default to `README.md`.
-    url = $routeParams.url ? 'assets/data/README.md'
+    url = $routeParams.url ? 'assets/README.md'
 
     # Request that the $http object fetch the data from the Url, then set the
     # $scope's *`content`* member to the result's data when the Promise
     # resolves.
     $http.get(url).then (result) ->
-      $scope.content = result.data
+      $scope.content = result.data.replace /(^[\s\S]*?\n\s*\n)/m, ''
 ]
 
 
 # ## myApp.navbarController
-# 
+#
 # *myApp.navbarController* provides data and handlers for the Navbar.
 myAppControllers.controller 'myApp.navbarController', [
   '$scope'
@@ -58,7 +58,7 @@ myAppControllers.controller 'myApp.navbarController', [
 
       # Open the About modal
       modalInstance = $modal.open
-        templateUrl: 'partials/about.html'
+        templateUrl: 'partials/about.tpl.html'
         controller: 'myApp.aboutModalInstanceController'
 
 
@@ -77,7 +77,7 @@ myAppControllers.controller 'myApp.navbarController', [
 
 
 # ## myApp.aboutModalController
-# 
+#
 # *myApp.navbarController* provides data and handlers for the About modal
 # dialog.
 myAppControllers.controller 'myApp.aboutModalInstanceController', [

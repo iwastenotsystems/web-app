@@ -1,22 +1,29 @@
 // Protractor E2E configuration file
 exports.config = {
   // The address of a running selenium server.
-  seleniumAddress: 'http://localhost:4444/wd/hub',
+  // Configure the seleniumAddress with the port from the config file:
+  // seleniumAddress: 'http://localhost:<%= port.protractor %>/wd/hub',
+  // Configure the seleniumAddress with the port from the environment variable:
+  // seleniumAddress: 'http://localhost:<%= process.env.SELENIUM_LAUNCHER_PORT %>/wd/hub',
+  // Configure the seleniumAddress with the hub address the environment variable:
+  seleniumAddress: '<%= process.env.SELENIUM_HUB %>',
 
   // Capabilities to be passed to the webdriver instance.
   capabilities: {
-    'browserName': 'chrome'
+    'browserName': 'phantomjs'
   },
 
   // Spec patterns are relative to the current working directly when
   // protractor is called.
   specs: [
-    '../tests/protractor/e2e/**/*.{coffee,js}'
+    <%= toQuotedString(_.flatten(spec), ',\n    ') %>
+    // '../spec/protractor/e2e/**/*.js',
+    // '../spec/protractor/e2e/**/*.coffee'
   ],
 
   // A base URL for your application under test. Calls to protractor.get()
   // with relative paths will be prepended with this.
-  baseUrl: 'http://localhost:8000',
+  baseUrl: 'http://localhost:9001',
 
   // Options to be passed to Jasmine-node.
   jasmineNodeOpts: {

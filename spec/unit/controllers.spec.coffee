@@ -5,7 +5,7 @@
 describe 'myApp.controllers', ->
 
   beforeEach ->
-    @addMatchers 
+    @addMatchers
       toEqualData: (expected) ->
         angular.equals @actual, expected
 
@@ -13,17 +13,18 @@ describe 'myApp.controllers', ->
   beforeEach module('myApp.services')
 
   describe 'myApp.manifestController', ->
-    scope = ctrl = $httpBackend = undefined    
+    scope = ctrl = $httpBackend = undefined
 
-    manifestData = 
+    manifestData =
       name: 'single-page-app'
       version: '0.0.0'
       authors: ['Jon Ruttan <jonruttan@gmail.com>']
-      description: 'A Coffescript Single-Page-Application boilerplate based on AngularJS and Twitter Bootstrap'
+      description: 'A Coffescript Single-Page-Application boilerplate based on
+        AngularJS and Twitter Bootstrap'
 
     beforeEach inject (_$httpBackend_, $rootScope, $controller) ->
       $httpBackend = _$httpBackend_
-      $httpBackend.expectGET('bower.json')
+      $httpBackend.expectGET('assets/bower.json')
         .respond manifestData
 
       scope = $rootScope.$new()

@@ -4,12 +4,12 @@
 
 # Create a new module called *`myApp.filters`* which will act as a container
 # for the application filters.
-myAppFilters = angular.module('myApp.filters', []);
+myAppFilters = angular.module 'myApp.filters', []
 
 # ## Markdown Filter
 # Create a new sanitising *Markdown* filter called *`markdown`*.
 # The filter is based on the *[Marked]* Markdown parser and compiler module.
-# 
+#
 # [Marked]: https://github.com/chjj/marked
 myAppFilters.filter 'markdown', [
   '$sce'
@@ -58,6 +58,12 @@ myAppFilters.filter 'markdown', [
       try
         marked text, (err, content) ->
           throw err if err
+
+          # Strip the starting and ending paragraph tags
+          # > My preference would be to handle this in the library, but for
+          # now this will have to do. --JR
+          content = content.replace /^<p>|<\/p>\n$/g, ''
+
           $sce.trustAsHtml content
       catch TypeError
 ]

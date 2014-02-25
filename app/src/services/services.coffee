@@ -4,17 +4,17 @@
 
 # Create a new module called *myApp.services* to act as a container
 # for the application services.
-myAppServices = angular.module('myApp.services', []);
+myAppServices = angular.module 'myApp.services', []
 
 
 # ## myApp.manifestService
-# 
+#
 # Retrieves the *Application Manifest* data from the `bower.json` file using
 # the AngularJS *`$resource`* RESTful object.
 myAppServices.service 'myApp.manifestService', [
   '$resource'
   ($resource) ->
-    manifestResource = $resource 'bower.json'
+    manifestResource = $resource 'assets/bower.json'
     assetsResource = $resource 'assets/assets.json'
 
     @getManifest = ->
@@ -22,24 +22,27 @@ myAppServices.service 'myApp.manifestService', [
 
     @getAssets = ->
       assetsResource.query()
-    
-    @    
+
+    @
 ]
 
 
 # ## myApp.modalService
-# 
+#
 # Provides a user interaction Modal window using the *`$modal`* service.
-# 
+#
 # ### Modal example
+#
 # ```
 # modalService.open().then (result) ->
 #   console.dir result
 # ```
-# 
+#
 # ### Static Modal example
+#
 # This example additionally demonstrates overriding the modal's default
 # *modal data* and *modal options*.
+#
 # ```
 # modalService.openStatic(
 #   headerText: 'Delete Item?'
@@ -51,7 +54,7 @@ myAppServices.service 'myApp.manifestService', [
 # ).then (result) ->
 #   console.dir result
 # ```
-# 
+#
 myAppServices.service 'myApp.modalService', [
   '$modal'
   ($modal) ->
@@ -64,14 +67,14 @@ myAppServices.service 'myApp.modalService', [
       closeButtonText: 'OK'
 
     # Service-wide modal options.
-    modalOptions = 
+    modalOptions =
       backdrop: true
       keyboard: true
       modalFade: true
-      templateUrl: 'partials/modal.html'
+      templateUrl: 'partials/modal.tpl.html'
 
     # ### Method: openStatic
-    # 
+    #
     # Open a *static* modal window -- window is **not** closed when clicking
     # outside of the modal window.
     @openModal = (customModalData = {}, customModalOptions = {}) ->
@@ -79,7 +82,7 @@ myAppServices.service 'myApp.modalService', [
       @open customModalData, customModalOptions
 
     # ### Methdod: open
-    # 
+    #
     # Open a modal window.
     @open = (customModalData = {}, customModalOptions = {}) ->
 
@@ -97,18 +100,23 @@ myAppServices.service 'myApp.modalService', [
       # Construct a controller to handle the modal instance in the event that
       # one hasn't been provided.
       if not tempModalOptions.controller
-        tempModalOptions.controller = ($scope, $modalInstance) ->
+        tempModalOptions.controller = [
+          '$scope', '$modalInstance',
+          ($scope, $modalInstance) ->
 
-          # Extend the modal instance controller's *`$scope`* with *modal data*.
-          angular.extend $scope, tempModalData
+            # Extend the modal instance controller's *`$scope`* with
+            # *modal data*.
+            angular.extend $scope, tempModalData
 
-          # Scope method to close modal instance when action button is pressed.
-          $scope.close = (result) ->
-            $modalInstance.close result
+            # Scope method to close modal instance when action button is
+            # pressed.
+            $scope.close = (result) ->
+              $modalInstance.close result
 
-          # Scope method to dismiss modal instance when 
-          $scope.dismiss = (reason) ->
-            $modalInstance.dismiss reason ? 'cancel'
+            # Scope method to dismiss modal instance when
+            $scope.dismiss = (reason) ->
+              $modalInstance.dismiss reason ? 'cancel'
+        ]
 
       $modal.open(tempModalOptions).result
 

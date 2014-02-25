@@ -53,9 +53,19 @@
         "description": "JavaScript package manager"
       },
       {
+        "name": "Grunt",
+        "url": "http://gruntjs.com/",
+        "description": "The JavaScript Task Runner"
+      },
+      {
         "name": "PhoneGap",
         "url": "http://phonegap.com/",
         "description": "mobile application framework"
+      },
+      {
+        "name": "EditorConfig",
+        "url": "http://editorconfig.org/",
+        "description": "coding style file format and text editor plugins"
       }
     ]
   },
@@ -68,5 +78,5 @@
         "description": "application skeleton for a typical AngularJS web app"
       }
     ]
-  } 
+  }
 ]

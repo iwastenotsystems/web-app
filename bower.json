@@ -1,6 +1,6 @@
 {
   "name": "web-app",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "authors": [
     "[Jon Ruttan](jonruttan@gmail.com)"
   ],
@@ -37,9 +37,7 @@
     "angular-touch": "latest",
     "angular-ui-bootstrap-bower": "latest",
     "angular-ui-bootstrap3": "latest",
-    "bootstrap-bower": "latest",
-    "requirejs": "latest",
-    "requirejs-domready": "latest",
+    "bootstrap": "latest",
     "marked": "latest"
   }
 }

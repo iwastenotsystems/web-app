@@ -8,6 +8,7 @@ app = angular.module 'myApp', [
   'ngResource'
   'ngRoute'
   'ngSanitize'
+  'templates-app'
   'myApp.controllers'
   'myApp.services'
   'myApp.filters'
@@ -18,10 +19,10 @@ app.config ($routeProvider) ->
   $routeProvider
     .when('/:url?',
       controller: 'myApp.staticContentController'
-      templateUrl: 'partials/content.html'
+      templateUrl: 'partials/content.tpl.html'
     )
     .when('/options',
       controller: 'OptionsController'
-      templateUrl: 'partials/options.html'
+      templateUrl: 'partials/options.tpl.html'
     )
     #.otherwise(redirectTo: '/')
