@@ -692,6 +692,7 @@ module.exports = (grunt) ->
     'concat:release_js'
     'uglify'
     'index:release'
+    'docs'
   ]
 
   grunt.registerTask 'build', [
@@ -761,7 +762,6 @@ module.exports = (grunt) ->
   # The default task is to `update` and `build` all versions.
   grunt.registerTask 'default', [
     'build'
-    'docs'
     'open:release'
     'connect:release'
   ]
