@@ -16,14 +16,12 @@ exports.config = {
   // Spec patterns are relative to the current working directly when
   // protractor is called.
   specs: [
-    <%= toQuotedString(_.flatten(spec), ',\n    ') %>
-    // '../spec/protractor/e2e/**/*.js',
-    // '../spec/protractor/e2e/**/*.coffee'
+    <%= toQuotedString(_.flatten(spec), ",\n    ") %>
   ],
 
   // A base URL for your application under test. Calls to protractor.get()
   // with relative paths will be prepended with this.
-  baseUrl: 'http://localhost:9001',
+  baseUrl: 'http://localhost:<%= port.test %>',
 
   // Options to be passed to Jasmine-node.
   jasmineNodeOpts: {
@@ -40,7 +38,7 @@ exports.config = {
   //   'protractor-coffee-preprocessor'
   // ]
   onPrepare: function() {
-    require('coffee-script');
+    require('coffee-script/register');
   }
 
 };
