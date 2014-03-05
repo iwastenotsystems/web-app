@@ -8,9 +8,7 @@ License:  "[The MIT License](http://opensource.org/licenses/MIT)"
 
 # Web Application Framework
 
-An *[AngularJS] and [Bootstrap] application framework* written in [CoffeeScript], with tasks automated using [Grunt] and [Grunt plugins], and the [Bower] package manager handling the web component dependencies. Deploys to web, as well as Mobile Devices via [PhoneGap].
-
-**Note:** The build system is in transition from CoffeeScript's Cake build system to [Grunt].
+An [AngularJS] and [Bootstrap] *application framework* written in [CoffeeScript]. Task automation is done using [Grunt] and [Grunt plugins], and the [Bower] package manager handles web component dependencies. Deploys to web, and additionally to Mobile Devices via [PhoneGap].
 
 [AngularJS]: http://angularjs.org/
 [Bootstrap]: http://getbootstrap.com/
@@ -20,11 +18,9 @@ An *[AngularJS] and [Bootstrap] application framework* written in [CoffeeScript]
 [Bower]: http://bower.io/
 [PhoneGap]: http://phonegap.com/
 
-> A [Grunt](http://gruntjs.com/) plugin to provide local build tasks for [Phonegap](http://phonegap.com/) applications
-
 ## Quick Start
 
-First, install [Git] and [Node.js], then:
+First, install [Git] and [Node.js], then in a shell:
 
 ```bash
 # Clone the *Web App* repository
@@ -34,7 +30,7 @@ git clone https://github.com/iwastenotsystems/web-app
 cd web-app
 
 # Install [Node.js] *Global* dependencies
-sudo npm install -g coffeescript grunt-cli bower
+sudo npm install -g coffee-script grunt-cli bower phantomjs
 
 # Install [Node.js] *Local* dependencies
 npm install
@@ -55,7 +51,7 @@ grunt
 
 > Node.js is a platform built on Chrome's JavaScript runtime for easily building fast, scalable network applications. Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient, perfect for data-intensive real-time applications that run across distributed devices.
 
-*Node.js* is required as as the underlying *scripting language* for the *CoffeeScript compiler*, the *[Grunt] build system* and the *[Bower] package manager*. Node.js uses the *`npm`* package manager to handle module dependencies.
+Node.js is required as as the underlying scripting language for the CoffeeScript compiler, the [Grunt] build system and the [Bower] package manager. Node.js uses the *`npm`* package manager to handle module dependencies.
 
 [Node.js]: http://nodejs.org/
 
@@ -65,7 +61,7 @@ grunt
 
 Once Node.js has been installed, CoffeeScript can be installed via the *`npm`* package manager by issuing the following command:
 
-    sudo npm install -g coffeescript
+    sudo npm install -g coffee-script
 
 This will put the `coffee` command in your system path, allowing it to be run from any directory.
 
@@ -125,7 +121,17 @@ Move to the project's root directory and issue:
 
     grunt develop
 
-to have the *`Grunt`* build tool watch the *app/* directory for changes and issue compile commands to create the corresponding JavaScript code in the *build/* directory.
+to have the *`Grunt`* build tool build the *develop* version of the project, start an internal web server (default port 8001), and watch the *app/* directory for changes, issuing build commands as necessary.
+
+
+## Release
+
+Move to the project's root directory and issue:
+
+    grunt build
+
+to have the *`Grunt`* build build and test the *develop* version of the project, then build the *release* version and *docs*.
+
 
 ---
 
