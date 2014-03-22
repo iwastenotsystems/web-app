@@ -22,7 +22,7 @@
   </head>
 
   <body>
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation" data-ng-controller="myApp.navbarController">
+    <div class="navbar navbar-fixed-top navbar-inverse" role="navigation" data-ng-controller="myApp.navbarController">
 
       <div class="container">
 
@@ -58,24 +58,26 @@
     </div><!-- /.navbar -->
 
     <div class="container">
+
       <div class="row row-offcanvas row-offcanvas-right" data-ng-class="!offcanvas && 'active'">
+
         <div class="col-xs-12 col-sm-9">
           <p class="pull-right visible-xs">
             <button type="button" class="btn btn-primary btn-xs" data-ng-init="offcanvas = true" data-ng-click="offcanvas = !offcanvas">Toggle nav</button>
           </p>
 
           <div class="jumbotron">
-            <div class="container">
 
               <div class="container">
                 <h1><%= pkg.name %></h1>
                 <p><%= pkg.description %></p>
               </div>
 
-            </div>
           </div>
+
           <!-- Placeholder for views -->
           <div data-ng-view=""></div>
+
         </div><!--/span-->
 
         <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
