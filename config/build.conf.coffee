@@ -1,7 +1,7 @@
 # This file/module contains all configuration for the build process.
 
 module.exports =
-  # TODO: Rewrite comment to reflect changes in the code. -- JR
+  # TODO: Rewrite comments to reflect changes in the code. -- JR
   # The `build_dir` folder is where our projects are compiled during
   # development and the `compile_dir` folder is where our app resides once it's
   # completely built.
@@ -84,7 +84,7 @@ module.exports =
       """
 
     git:
-      branch: 'origin'
+      branch: 'master'
       tagName: 'v%VERSION%'
       tagMessage: 'Version %VERSION%'
 
