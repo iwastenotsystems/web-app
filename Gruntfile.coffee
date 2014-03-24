@@ -29,7 +29,6 @@ module.exports = (grunt) ->
     # Generate a changelog from git metadata, using the AngularJS commit
     # conventions. View CONVENTIONS.md for a synposis of the conventions with
     # commit examples.
-    # TODO: Test this after a commit w/properly formatted comments -- JR
     changelog:
       options:
         dest: '<%= file.changelog.dest %>'
@@ -42,13 +41,13 @@ module.exports = (grunt) ->
           '<%= file.manifest.node %>'
           '<%= file.manifest.bower %>'
         ]
-        commit: false
+        commit: true
         commitMessage: 'chore(release): <%= bump.options.tagName %>'
         commitFiles: [
           '<%= file.manifest.node %>'
           '<%= file.manifest.bower %>'
         ]
-        createTag: false
+        createTag: true
         tagName: '<%= meta.git.tagName %>'
         tagMessage: '<%= meta.git.tagMessage %>'
         push: false
