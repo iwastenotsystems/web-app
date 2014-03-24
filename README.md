@@ -3,7 +3,7 @@ Subtitle: Using CoffeeScript, AngularJS, Twitter Bootstrap and PhoneGap
 Keywords: [#CoffeeScript, #AngularJS, #Bootstrap, #PhoneGap, #SinglePageApplication, #SPA, #SPI, #application, #framework]  
 Author:   "[Jon Ruttan](jonruttan@iwastenotsystems.com)"  
 Date:     2013-10-21  
-Revision: 3 (2014-01-15)  
+Revision: 4 (2014-03-24)  
 License:  "[The MIT License](http://opensource.org/licenses/MIT)"  
 
 # Web Application Framework
@@ -20,7 +20,7 @@ An [AngularJS] and [Bootstrap] *application framework* written in [CoffeeScript]
 
 ## Quick Start
 
-First, install [Git] and [Node.js], then in a shell:
+First, install [Git] and [Node.js] and , then in a shell:
 
 ```bash
 # Clone the *Web App* repository
@@ -137,6 +137,8 @@ to have the *`Grunt`* build build and test the *develop* version of the project,
 
 
 ## Resources
+
+- [ngBoilerplate](https://github.com/ngbp/ngbp)
 
 ## Images
 
